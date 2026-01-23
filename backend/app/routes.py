@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 
 api = Blueprint("api", __name__)
 
@@ -27,7 +27,8 @@ def submit_measurements():
     response = {
         "risk_level": "unknown",
         "recommendation": "This is a placeholder response",
-        "received_data": data
+        "received_data": data                              # To verify data was passed correctly
+        
     }
 
     return jsonify(response), 200
