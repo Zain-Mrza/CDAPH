@@ -21,7 +21,7 @@ def submit_measurements():
 
     data = request.json
 
-    # Algorithm goes here
+    # TODO: Algorithm goes here
 
     # Algorithm result is sent back to frontend
     response = {
