@@ -12,8 +12,8 @@ import { translations } from "./translations"; // Refer to translations.ts
  * 
  * @example
  * const t = useI18n("es"); // Choose Español
- * t("start"); // "Comenzar"
- * t("next"); // "Siguiente"
+ * t("start"); // returns "Comenzar"
+ * t("next"); // returns "Siguiente"
  */
 export function useI18n(lang: "en" | "es") {    
     return (key: keyof typeof translations["en"]) =>
