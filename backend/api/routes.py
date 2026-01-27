@@ -6,64 +6,34 @@ from algorithm import calculate_risk
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
-# -----------------------------
-# Health check (ping)
-# -----------------------------
-@api.route("/health", methods=["GET"])
-def health_check():
-    return jsonify({"status": "ok"}), 200
-
-
-# -----------------------------
-# Measurement endpoints
-# -----------------------------
-
-@api.route("/bp", methods=["POST"])
-def submit_bp():
+@api.route("/measurement", methods=["POST"])
+def submit_measurement():
     data = request.json
 
-    patient_state["blood_pressure"] = {
-        "systolic": data.get("systolic"),
-        "diastolic": data.get("diastolic"),
-    }
+    measurement_type = data.get("type")
+    value = data.get("value")
 
-    return jsonify({"status": "blood pressure stored"}), 200
+    if measurement_type == "bp":
+        systolic, diastolic = value.split("/")
+        patient_state["blood_pressure"] = {
+            "systolic": int(systolic),
+            "diastolic": int(diastolic),
+        }
 
+    elif measurement_type == "height":
+        patient_state["height_cm"] = float(value)
 
-@api.route("/height", methods=["POST"])
-def submit_height():
-    data = request.json
+    elif measurement_type == "weight":
+        patient_state["weight_kg"] = float(value)
 
-    patient_state["height_cm"] = data.get("height_cm")
+    elif measurement_type == "waist":
+        patient_state["waist_cm"] = float(value)
 
-    return jsonify({"status": "height stored"}), 200
+    else:
+        return jsonify({"error": "unknown measurement type"}), 400
 
+    return jsonify({"status": f"{measurement_type} stored"}), 200
 
-@api.route("/weight", methods=["POST"])
-def submit_weight():
-    data = request.json
-
-    patient_state["weight_kg"] = data.get("weight_kg")
-
-    return jsonify({"status": "weight stored"}), 200
-
-
-@api.route("/waist", methods=["POST"])
-def submit_waist():
-    data = request.json
-
-    patient_state["waist_cm"] = data.get("waist_cm")
-
-    return jsonify({"status": "waist stored"}), 200
-
-
-@api.route("/visual_acuity", methods=["POST"])
-def submit_visual_acuity():
-    data = request.json
-
-    patient_state["visual_acuity"] = data["visual_acuity"]
-
-    return jsonify({"status": "visual acuity stored"}), 200
 
 
 # -----------------------------
