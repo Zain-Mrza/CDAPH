@@ -1,35 +1,101 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Start from "./pages/Start";
+import BloodPressure from "./pages/BloodPressure";
+import Height from "./pages/Height";
+import Weight from "./pages/Weight";
+
+type Step = "start" | "bp" | "height" | "weight" | "done";
+
+export default function App() {
+  const [step, setStep] = useState<Step>("start");
+
+  const [bloodPressure, setBloodPressure] = useState<{
+    systolic: number;
+    diastolic: number;
+  } | null>(null);
+
+  const [heightCm, setHeightCm] = useState<number | null>(null);
+  const [weightKg, setWeightKg] = useState<number | null>(null);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="kioskShell">
+      {step === "start" && <Start onNext={() => setStep("bp")} />}
 
-export default App
+      {step === "bp" && (
+        <BloodPressure
+          onNext={(systolic, diastolic) => {
+            setBloodPressure({ systolic, diastolic });
+            setStep("height");
+          }}
+        />
+      )}
+
+      {step === "height" && (
+        <Height
+          onNext={(height) => {
+            setHeightCm(height);
+            setStep("weight");
+          }}
+        />
+      )}
+
+      {step === "weight" && (
+        <Weight
+          onNext={(weight) => {
+            setWeightKg(weight);
+            setStep("done");
+          }}
+        />
+      )}
+
+      {step === "done" && (
+        <div className="kioskCard" role="region" aria-label="Summary">
+          <div className="kioskHeader">
+            <h1>Measurements Complete</h1>
+            <p>Please review the values below.</p>
+          </div>
+
+          <div className="summaryList">
+            <div className="summaryRow">
+              <span className="summaryLabel">Blood Pressure</span>
+              <span className="summaryValue">
+                {bloodPressure
+                  ? `${bloodPressure.systolic} / ${bloodPressure.diastolic} mmHg`
+                  : "—"}
+              </span>
+            </div>
+
+            <div className="summaryRow">
+              <span className="summaryLabel">Height</span>
+              <span className="summaryValue">
+                {heightCm !== null ? `${heightCm} cm` : "—"}
+              </span>
+            </div>
+
+            <div className="summaryRow">
+              <span className="summaryLabel">Weight</span>
+              <span className="summaryValue">
+                {weightKg !== null ? `${weightKg} kg` : "—"}
+              </span>
+            </div>
+          </div>
+
+          <div className="actions">
+            <button
+              className="button"
+              onClick={() => {
+                setBloodPressure(null);
+                setHeightCm(null);
+                setWeightKg(null);
+                setStep("start");
+              }}
+            >
+              Start Over
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
