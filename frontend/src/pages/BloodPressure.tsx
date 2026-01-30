@@ -35,12 +35,15 @@ export default function BloodPressure({ onNext }: Props) {
     setTouched(true);
     if (canContinue) onNext(sys, dia);
   }
-  
+
 // Want to add picture with arrows pointing from systolic/diastolic number to their corresponding fields
+// Recall every bit of text will later be pulled from a dictionary with translations
+
   return (
     <Screen
       title="Blood Pressure"
-      subtitle="Sit still with your arm supported. Enter the values shown on the cuff."
+      subtitle="Insert your upper arm in the cuff as shown in the previous video.
+                Enter the values shown on the attatched monitor."
     >
       <div className="field">
         <label htmlFor={sysId}>Systolic</label>
