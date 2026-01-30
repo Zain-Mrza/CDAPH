@@ -35,6 +35,7 @@ export default function BloodPressure({ onNext }: Props) {
     setTouched(true);
     if (canContinue) onNext(sys, dia);
   }
+  
 // Want to add picture with arrows pointing from systolic/diastolic number to their corresponding fields
   return (
     <Screen
