@@ -7,7 +7,7 @@
   --text: #0b1220;
   --muted: #3a4a6b;
 
-  /* Soft bright blue */
+  /* Nice blue */
   --btn: #4f8dff;
   --btnHover: #3f7eff;
   --btnPressed: #2f6bff;
@@ -26,7 +26,7 @@ body,
 #root {
   height: 100%;
   margin: 0;
-  background: #ffffff !important; /* bulletproof: overrides template dark bg */
+  background: #ffffff;
   color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
@@ -39,7 +39,7 @@ body,
   background: var(--bg);
 }
 
-/* The main "card" that pages should render into */
+/* The main card that pages render into */
 .kioskCard {
   width: min(900px, 100%);
   background: var(--card);
