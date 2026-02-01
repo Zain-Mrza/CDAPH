@@ -18,6 +18,8 @@ export default function App() {
     const [heightCm, setHeightCm] = useState<number | null>(null);
     const [weightKg, setWeightKg] = useState<number | null>(null);
 
+    // Need to figure out how to make previous inputs persist when I navigate back
+
     return (
         <div className="kioskShell">
             {step === "start" && <Start onNext={() => setStep("bp")} />}
