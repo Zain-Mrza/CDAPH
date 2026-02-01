@@ -116,13 +116,14 @@ body,
 
 .actions {
   display: flex;
+  justify-content: space-between;
   gap: 16px;
   margin-top: 28px;
 }
 
 /* Soft bright blue primary button */
 .button {
-  flex: 1;
+  min-width: 200px;
   min-height: 68px;
   border: 1px solid rgba(0, 0, 0, 0.03);
   border-radius: 18px;
@@ -132,6 +133,12 @@ body,
   color: var(--btnText);
   cursor: pointer;
   box-shadow: 0 10px 22px rgba(47, 107, 255, 0.20);
+}
+
+.button.secondary {
+  background: #eef2ff;
+  color: var(--text);
+  box-shadow: none;
 }
 
 .button:hover {
