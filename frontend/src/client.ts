@@ -24,13 +24,13 @@ export async function healthCheck() {
  */
 
 export const submitMeasurements = async (
-    type: MeasurementType,
+    measurement: MeasurementType,
     value: string | number,
 ): Promise<SubmitResponse> => {
     const res = await fetch("api/measurement", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, value }),
+        body: JSON.stringify({ measurement, value }),
     });
 
     return res.json();

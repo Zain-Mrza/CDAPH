@@ -10,7 +10,7 @@ api = Blueprint("api", __name__, url_prefix="/api")
 def submit_measurement():
     data = request.json
 
-    measurement_type = data.get("type")
+    measurement_type = data.get("measurement")
     value = data.get("value")
 
     if measurement_type == "bp":
