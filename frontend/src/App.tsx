@@ -28,6 +28,9 @@ export default function App() {
                         setBloodPressure({ systolic, diastolic });
                         setStep("height");
                     }}
+                    onBack={() => {
+                        setStep("start");
+                    }}
                 />
             )}
 
@@ -37,6 +40,9 @@ export default function App() {
                         setHeightCm(height);
                         setStep("weight");
                     }}
+                    onBack={() => {
+                        setStep("bp");
+                    }}
                 />
             )}
 
@@ -45,6 +51,9 @@ export default function App() {
                     onNext={(weight) => {
                         setWeightKg(weight);
                         setStep("done");
+                    }}
+                    onBack={() => {
+                        setStep("height");
                     }}
                 />
             )}

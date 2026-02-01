@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import Screen from "../components/Screen";
-import Actions from "../components/Actions";
+import NavigationActions from "../components/NavigationActions";
 import { submitMeasurements } from "../client";
 
 /**
@@ -12,9 +12,10 @@ import { submitMeasurements } from "../client";
 
 type Props = {
     onNext: (systolic: number, diastolic: number) => void;
+    onBack?: () => void;
 };
 
-export default function BloodPressure({ onNext }: Props) {
+export default function BloodPressure({ onNext, onBack }: Props) {
     const sysId = useId();
     const diaId = useId();
     const errId = useId();
@@ -105,15 +106,11 @@ export default function BloodPressure({ onNext }: Props) {
                 </div>
             )}
 
-            <Actions>
-                <button
-                    className="button"
-                    onClick={submit}
-                    disabled={!canContinue}
-                >
-                    Continue
-                </button>
-            </Actions>
+            <NavigationActions
+                clickNext={submit}
+                disableNext={!canContinue}
+                clickBack={onBack}
+            />
         </Screen>
     );
 }

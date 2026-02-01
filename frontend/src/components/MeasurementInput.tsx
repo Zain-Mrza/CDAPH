@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import Screen from "./Screen";
-import Actions from "./Actions";
+import NavigationActions from "./NavigationActions";
 import { type MeasurementType, submitMeasurements } from "../client";
 
 type Props = {
@@ -15,6 +15,7 @@ type Props = {
     max?: number;
     onSubmit: (value: number) => void;
     buttonText?: string;
+    onBack?: () => void; // Function that will be passed all the way from App.tsx to move back
 };
 
 export default function MeasurementInput({
@@ -28,7 +29,7 @@ export default function MeasurementInput({
     min,
     max,
     onSubmit,
-    buttonText = "Continue",
+    onBack,
 }: Props) {
     const inputId = useId();
 
@@ -91,16 +92,11 @@ export default function MeasurementInput({
                     </div>
                 )}
             </div>
-
-            <Actions>
-                <button
-                    className="button"
-                    onClick={submit}
-                    disabled={!canContinue}
-                >
-                    {buttonText}
-                </button>
-            </Actions>
+            <NavigationActions
+                clickNext={submit}
+                clickBack={onBack}
+                disableNext={!canContinue}
+            />
         </Screen>
     );
 }
