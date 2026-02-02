@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
-import Screen from "./Screen";
-import NavigationActions from "./NavigationActions";
 import { type MeasurementType, submitMeasurements } from "../client";
+import NavigationActions from "./NavigationActions";
+import Screen from "./Screen";
 
 type Props = {
     measurement: MeasurementType;

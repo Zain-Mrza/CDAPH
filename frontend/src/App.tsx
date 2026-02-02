@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import Start from "./pages/Start";
 import BloodPressure from "./pages/BloodPressure";
 import Height from "./pages/Height";
+import Start from "./pages/Start";
 import Weight from "./pages/Weight";
 
 type Step = "start" | "bp" | "height" | "weight" | "done";
