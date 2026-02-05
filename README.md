@@ -18,7 +18,7 @@ The system is designed with the following goals in mind:
 
 ---
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 - **Frontend:**
     - React
@@ -34,7 +34,7 @@ The system is designed with the following goals in mind:
 
 ---
 
-## 🧭 Application Flow
+## Application Flow
 
 1. **Start Screen**
     - Introduces the kiosk experience
@@ -60,7 +60,7 @@ The system is designed with the following goals in mind:
 
 ---
 
-## 🔐 Security & Privacy Considerations
+## Security & Privacy Considerations
 
 This project is designed with healthcare constraints in mind:
 
@@ -71,7 +71,7 @@ This project is designed with healthcare constraints in mind:
 
 ---
 
-## 🚧 Work in Progress
+## Work in Progress
 
 Planned or in-progress features:
 
@@ -86,7 +86,7 @@ Planned or in-progress features:
 
 ---
 
-## 🛠️ Local Development Setup
+## Local Development Setup
 
 ### 1. Clone the repository
 
@@ -147,7 +147,7 @@ http://localhost:5000
 
 ---
 
-## 🎨 Frontend Setup (React)
+## Frontend Setup (React)
 
 ### 6. Install Node.js
 
@@ -200,7 +200,6 @@ The frontend communicates with the backend over localhost.
 
 ---
 
-## 📜 License
+## License
 
 This project is currently intended for academic and research use. Licensing details will be added as the project matures.
-
