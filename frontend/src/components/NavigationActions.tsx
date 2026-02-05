@@ -19,7 +19,7 @@ export default function NavigationActions({
             ) : (
                 <div />
             )}
-            ;
+
             {clickNext && (
                 <button
                     className="button"
