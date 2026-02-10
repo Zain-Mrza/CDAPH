@@ -13,7 +13,7 @@ export default function AgeSexInput({ onNext, onBack }: Props) {
             label1="Age"
             label2="Biological Sex"
             unit1="years"
-            placeholder1="25"
+            placeholder1="e.g., 25"
             min1={0}
             max1={120}
             options2={[

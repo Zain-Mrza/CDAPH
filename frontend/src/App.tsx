@@ -53,7 +53,7 @@ export default function App() {
             {step === "bpInstructions" && (
                 <InstructionWithVideo
                     title="Thank You!"
-                    instructionText="Please place your left arm in the blood pressure cuff as shown below. Enter your results in the next page"
+                    instructionText="Please place your left arm in the blood pressure cuff as shown below. Enter your results in the next page."
                     videoSrc={stockVideo}
                     videoAlt="How to place your arm in the blood pressure cuff"
                     onContinue={() => setStep("bp")}
@@ -76,7 +76,7 @@ export default function App() {
             {step === "heightInstructions" && (
                 <InstructionWithVideo
                     title="Thank You!"
-                    instructionText="Please move to the height measuring device behind you. Press the button and allow your measurement to be taken."
+                    instructionText="Please move to the height measuring device behind you. Press the button and allow your measurement to be taken as shown below."
                     videoSrc={stockVideo}
                     videoAlt="How to use the stadiometer"
                     onContinue={() => setStep("height")}
@@ -99,7 +99,7 @@ export default function App() {
             {step === "weightInstructions" && (
                 <InstructionWithVideo
                     title="Thank You!"
-                    instructionText="Please move to the weight scale and stand on it. Continue standing until your weight is acquired"
+                    instructionText="Please move to the weight scale and stand on it as shown below. Continue standing until your weight is acquired."
                     videoSrc={stockVideo}
                     videoAlt="How to use the weight scale"
                     onContinue={() => setStep("weight")}
