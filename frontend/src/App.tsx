@@ -1,12 +1,14 @@
 import { useState } from "react";
-
 import stockVideo from "./assets/stock.mp4";
 import InstructionWithVideo from "./components/InstructionWithVideo";
+import ProgressBar from "./components/ProgressBar";
 import AgeSexInput from "./pages/AgeSex";
 import BloodPressure from "./pages/BloodPressure";
 import Height from "./pages/Height";
+import Results from "./pages/Results";
 import Start from "./pages/Start";
 import Weight from "./pages/Weight";
+import "./styles/progress-bar.css";
 
 type Step =
     | "start"
@@ -17,7 +19,25 @@ type Step =
     | "height"
     | "weightInstructions"
     | "weight"
-    | "done";
+    | "done"
+    | "results";
+
+// Helper function to get step number
+function getStepNumber(step: Step): number {
+    const stepMap: Record<Step, number> = {
+        start: 0,
+        ageSex: 1,
+        bpInstructions: 2,
+        bp: 2,
+        heightInstructions: 3,
+        height: 3,
+        weightInstructions: 4,
+        weight: 4,
+        results: 5,
+        done: 6,
+    };
+    return stepMap[step];
+}
 
 export default function App() {
     const [step, setStep] = useState<Step>("start");
@@ -33,12 +53,23 @@ export default function App() {
     const [heightCm, setHeightCm] = useState<number | null>(null);
     const [weightKg, setWeightKg] = useState<number | null>(null);
 
+    const currentStepNumber = getStepNumber(step);
+    const totalSteps = 5;
+    const showProgress = step !== "start" && step !== "done";
+
     return (
         <div className="kioskShell">
+            {showProgress && (
+                <ProgressBar
+                    currentStep={currentStepNumber}
+                    totalSteps={totalSteps}
+                />
+            )}
             {step === "start" && <Start onNext={() => setStep("ageSex")} />}
-
             {step === "ageSex" && (
                 <AgeSexInput
+                    initialAge={age ?? undefined}
+                    initialSex={sex ?? undefined}
                     onNext={(age, sex) => {
                         setAge(age);
                         setSex(sex);
@@ -49,7 +80,6 @@ export default function App() {
                     }}
                 />
             )}
-
             {step === "bpInstructions" && (
                 <InstructionWithVideo
                     title="Thank You!"
@@ -60,9 +90,10 @@ export default function App() {
                     onBack={() => setStep("ageSex")}
                 />
             )}
-
             {step === "bp" && (
                 <BloodPressure
+                    initialSystolic={bloodPressure?.systolic}
+                    initialDiastolic={bloodPressure?.diastolic}
                     onNext={(systolic, diastolic) => {
                         setBloodPressure({ systolic, diastolic });
                         setStep("heightInstructions");
@@ -72,7 +103,6 @@ export default function App() {
                     }}
                 />
             )}
-
             {step === "heightInstructions" && (
                 <InstructionWithVideo
                     title="Thank You!"
@@ -83,7 +113,6 @@ export default function App() {
                     onBack={() => setStep("bp")}
                 />
             )}
-
             {step === "height" && (
                 <Height
                     onNext={(height) => {
@@ -95,7 +124,6 @@ export default function App() {
                     }}
                 />
             )}
-
             {step === "weightInstructions" && (
                 <InstructionWithVideo
                     title="Thank You!"
@@ -106,18 +134,23 @@ export default function App() {
                     onBack={() => setStep("height")}
                 />
             )}
-
             {step === "weight" && (
                 <Weight
                     onNext={(weight) => {
                         setWeightKg(weight);
-                        setStep("done");
+                        setStep("results");
                     }}
                     onBack={() => {
                         setStep("weightInstructions");
                     }}
                 />
             )}
+            {
+                step === "results" && <Results />
+
+                /* Add handling for translated text somehow, maybe pass in language
+            from top level and handle in component*/
+            }
 
             {step === "done" && (
                 <div className="kioskCard" role="region" aria-label="Summary">
@@ -140,7 +173,11 @@ export default function App() {
                                 {sex !== null
                                     ? sex === 1
                                         ? "Male"
-                                        : "Female"
+                                        : sex === 2
+                                          ? "Female"
+                                          : sex === 3
+                                            ? "Intersex"
+                                            : "Prefer not to say"
                                     : "—"}
                             </span>
                         </div>
