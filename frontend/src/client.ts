@@ -35,3 +35,12 @@ export const submitMeasurements = async (
 
     return res.json();
 };
+
+export const getResults = async () => {
+    const res = await fetch("/api/risk", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    return res.json();
+};
