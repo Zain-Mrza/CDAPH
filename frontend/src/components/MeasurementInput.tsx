@@ -16,6 +16,7 @@ type Props = {
     onSubmit: (value: number) => void;
     buttonText?: string;
     onBack?: () => void; // Function that will be passed all the way from App.tsx to move back
+    initialValue?: number | null;
 };
 
 export default function MeasurementInput({
@@ -30,12 +31,13 @@ export default function MeasurementInput({
     max,
     onSubmit,
     onBack,
+    initialValue,
 }: Props) {
     const inputId = useId();
 
     const errorId = useId();
 
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(initialValue ?? "");
     const [touched, setTouched] = useState(false);
 
     const n = Number(value);

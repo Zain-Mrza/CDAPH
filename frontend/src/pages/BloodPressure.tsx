@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
-import Screen from "../components/Screen";
-import NavigationActions from "../components/NavigationActions";
 import { submitMeasurements } from "../client";
+import NavigationActions from "../components/NavigationActions";
+import Screen from "../components/Screen";
 
 /**
  * This file is a hacky solution to my inability to
@@ -13,15 +13,26 @@ import { submitMeasurements } from "../client";
 type Props = {
     onNext: (systolic: number, diastolic: number) => void;
     onBack?: () => void;
+    initialSystolic?: number;
+    initialDiastolic?: number;
 };
 
-export default function BloodPressure({ onNext, onBack }: Props) {
+export default function BloodPressure({
+    onNext,
+    onBack,
+    initialSystolic,
+    initialDiastolic,
+}: Props) {
     const sysId = useId();
     const diaId = useId();
     const errId = useId();
 
-    const [systolic, setSystolic] = useState("");
-    const [diastolic, setDiastolic] = useState("");
+    const [systolic, setSystolic] = useState(
+        initialSystolic ? initialSystolic.toString() : "",
+    ); // Sets initial state to global if it exists (for back button)
+    const [diastolic, setDiastolic] = useState(
+        initialDiastolic ? initialDiastolic.toString() : "",
+    ); // Same here
     const [touched, setTouched] = useState(false);
 
     const sys = Number(systolic);

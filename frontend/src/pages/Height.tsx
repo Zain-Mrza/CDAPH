@@ -3,9 +3,10 @@ import MeasurementInput from "../components/MeasurementInput";
 type Props = {
     onNext: (heightCm: number) => void;
     onBack: () => void;
+    initialHeight?: number | null;
 };
 
-export default function Height({ onNext, onBack }: Props) {
+export default function Height({ onNext, onBack, initialHeight }: Props) {
     return (
         <MeasurementInput
             measurement="height" // The name we send to the backend request
@@ -19,6 +20,7 @@ export default function Height({ onNext, onBack }: Props) {
             onSubmit={onNext}
             onBack={onBack}
             buttonText="Continue"
+            initialValue={initialHeight}
         />
     );
 }

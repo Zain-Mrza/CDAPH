@@ -3,9 +3,10 @@ import MeasurementInput from "../components/MeasurementInput";
 type Props = {
     onNext: (weightKg: number) => void;
     onBack?: () => void;
+    initialWeight?: number | null;
 };
 
-export default function Weight({ onNext, onBack }: Props) {
+export default function Weight({ onNext, onBack, initialWeight }: Props) {
     return (
         <MeasurementInput
             measurement="weight"
@@ -18,6 +19,7 @@ export default function Weight({ onNext, onBack }: Props) {
             max={300}
             onSubmit={onNext}
             onBack={onBack}
+            initialValue={initialWeight}
         />
     );
 }
