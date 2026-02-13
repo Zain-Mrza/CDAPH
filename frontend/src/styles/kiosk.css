@@ -279,3 +279,10 @@ body,
     outline: 4px solid rgba(47, 107, 255, 0.22);
     outline-offset: 2px;
 }
+
+.kioskContent {
+    width: min(900px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

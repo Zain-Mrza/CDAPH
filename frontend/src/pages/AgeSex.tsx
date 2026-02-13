@@ -1,12 +1,14 @@
 import { useId, useState } from "react";
 import NavigationActions from "../components/NavigationActions";
 import Screen from "../components/Screen";
+import { InputInstructions } from "../i18n/measurementInput";
 
 type Props = {
     onNext: (age: number, sex: number) => void;
     onBack?: () => void;
     initialAge?: number;
     initialSex?: number;
+    language: "en" | "es";
 };
 
 export default function AgeSexInput({
@@ -14,6 +16,7 @@ export default function AgeSexInput({
     onBack,
     initialAge,
     initialSex,
+    language,
 }: Props) {
     const ageId = useId();
     const sexId = useId();
@@ -27,14 +30,16 @@ export default function AgeSexInput({
     const ageNum = Number(age);
     const isNumber = age !== "" && !Number.isNaN(ageNum);
 
-    let error: string | null = null;
+    const text = InputInstructions["ageSex"][language];
+
+    let error: string | null | undefined = null;
     if (touchedAge) {
         if (!isNumber) {
-            error = "Please enter a number.";
+            error = text.error1;
         } else if (ageNum < 0) {
-            error = "Age must be at least 0.";
+            error = text.error2;
         } else if (ageNum > 120) {
-            error = "Age must be at most 120.";
+            error = text.error3;
         }
     }
 
@@ -49,12 +54,9 @@ export default function AgeSexInput({
     }
 
     return (
-        <Screen
-            title="Personal Information"
-            subtitle="Please provide your age and biological sex"
-        >
+        <Screen title={text.title} subtitle={text.instruction}>
             <div className="field">
-                <label htmlFor={ageId}>Age</label>
+                <label htmlFor={ageId}>{text.label1}</label>
 
                 <div className="inputRow">
                     <input
@@ -72,7 +74,7 @@ export default function AgeSexInput({
                         aria-invalid={Boolean(error)}
                         aria-describedby={error ? errorId : undefined}
                     />
-                    <span className="unit">years</span>
+                    <span className="unit">{text.helper5}</span>
                 </div>
 
                 {error && (
@@ -83,7 +85,7 @@ export default function AgeSexInput({
             </div>
 
             <div className="field">
-                <label htmlFor={sexId}>Biological Sex</label>
+                <label htmlFor={sexId}>{text.label2}</label>
 
                 <div className="multipleChoice">
                     <button
@@ -94,7 +96,7 @@ export default function AgeSexInput({
                             setTouchedSex(true);
                         }}
                     >
-                        Male
+                        {text.helper1}
                     </button>
                     <button
                         type="button"
@@ -104,7 +106,7 @@ export default function AgeSexInput({
                             setTouchedSex(true);
                         }}
                     >
-                        Female
+                        {text.helper2}
                     </button>
                     <button
                         type="button"
@@ -114,7 +116,7 @@ export default function AgeSexInput({
                             setTouchedSex(true);
                         }}
                     >
-                        Intersex
+                        {text.helper3}
                     </button>
                     <button
                         type="button"
@@ -124,13 +126,13 @@ export default function AgeSexInput({
                             setTouchedSex(true);
                         }}
                     >
-                        Prefer not to say
+                        {text.helper4}
                     </button>
                 </div>
 
                 {touchedSex && sex === null && (
                     <div className="error" role="alert">
-                        Please select an option.
+                        {text.error4}
                     </div>
                 )}
             </div>

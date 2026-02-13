@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { submitMeasurements } from "../client";
 import NavigationActions from "../components/NavigationActions";
 import Screen from "../components/Screen";
+import { InputInstructions } from "../i18n/measurementInput";
 
 /**
  * This file is a hacky solution to my inability to
@@ -12,6 +13,7 @@ import Screen from "../components/Screen";
 
 type Props = {
     onNext: (systolic: number, diastolic: number) => void;
+    language: "en" | "es";
     onBack?: () => void;
     initialSystolic?: number;
     initialDiastolic?: number;
@@ -22,6 +24,7 @@ export default function BloodPressure({
     onBack,
     initialSystolic,
     initialDiastolic,
+    language,
 }: Props) {
     const sysId = useId();
     const diaId = useId();
@@ -40,12 +43,14 @@ export default function BloodPressure({
 
     const isNum = (s: string, n: number) => s !== "" && !Number.isNaN(n);
 
-    let error: string | null = null;
+    const bpText = InputInstructions["bp"][language];
+
+    let error: string | null | undefined = null;
     if (touched) {
         if (!isNum(systolic, sys) || !isNum(diastolic, dia)) {
-            error = "Please enter both numbers.";
+            error = bpText.error1;
         } else if (sys <= dia) {
-            error = "Systolic must be higher than diastolic.";
+            error = bpText.error2;
         }
     }
 
@@ -63,13 +68,9 @@ export default function BloodPressure({
     // Recall every bit of text will later be pulled from a dictionary with translations
 
     return (
-        <Screen
-            title="Blood Pressure"
-            subtitle="Insert your upper arm in the cuff as shown in the previous video.
-                Enter the values shown on the attatched monitor."
-        >
+        <Screen title={bpText.title} subtitle={bpText.instruction}>
             <div className="field">
-                <label htmlFor={sysId}>Systolic</label>
+                <label htmlFor={sysId}>{bpText.label1}</label>
                 <div className="inputRow">
                     <input
                         id={sysId}
@@ -85,11 +86,11 @@ export default function BloodPressure({
                     />
                     <span className="unit">mmHg</span>
                 </div>
-                <div className="help">Top number</div>
+                <div className="help">{bpText.helper1}</div>
             </div>
 
             <div className="field">
-                <label htmlFor={diaId}>Diastolic</label>
+                <label htmlFor={diaId}>{bpText.label2}</label>
                 <div className="inputRow">
                     <input
                         id={diaId}
@@ -108,7 +109,7 @@ export default function BloodPressure({
                     />
                     <span className="unit">mmHg</span>
                 </div>
-                <div className="help">Bottom number</div>
+                <div className="help">{bpText.helper2}</div>
             </div>
 
             {error && (

@@ -4,9 +4,15 @@ type Props = {
     onNext: (weightKg: number) => void;
     onBack?: () => void;
     initialWeight?: number | null;
+    language: "en" | "es";
 };
 
-export default function Weight({ onNext, onBack, initialWeight }: Props) {
+export default function Weight({
+    onNext,
+    onBack,
+    initialWeight,
+    language,
+}: Props) {
     return (
         <MeasurementInput
             measurement="weight"
@@ -20,6 +26,7 @@ export default function Weight({ onNext, onBack, initialWeight }: Props) {
             onSubmit={onNext}
             onBack={onBack}
             initialValue={initialWeight}
+            language={language}
         />
     );
 }

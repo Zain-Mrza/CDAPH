@@ -17,6 +17,7 @@ type Props = {
     buttonText?: string;
     onBack?: () => void; // Function that will be passed all the way from App.tsx to move back
     initialValue?: number | null;
+    language: "en" | "es";
 };
 
 export default function MeasurementInput({
@@ -32,7 +33,20 @@ export default function MeasurementInput({
     onSubmit,
     onBack,
     initialValue,
+    language,
 }: Props) {
+    const MeasurementInputText = {
+        en: {
+            error: "Please enter a number.",
+            minError: "Value must be at least",
+            maxError: "Value must be at most",
+        },
+        es: {
+            error: "Por favor, ingrese un número.",
+            minError: "El valor debe ser al menos",
+            maxError: "El valor debe ser como máximo",
+        },
+    };
     const inputId = useId();
 
     const errorId = useId();
@@ -43,13 +57,15 @@ export default function MeasurementInput({
     const n = Number(value);
     const isNumber = value !== "" && !Number.isNaN(n);
 
+    const text = MeasurementInputText[language];
+
     let error: string | null = null;
     if (touched) {
-        if (!isNumber) error = "Please enter a number.";
+        if (!isNumber) error = text.error;
         else if (min !== undefined && n < min)
-            error = `Value must be at least ${min}.`;
+            error = `${text.minError} ${min}.`;
         else if (max !== undefined && n > max)
-            error = `Value must be at most ${max}.`;
+            error = `${text.maxError} ${max}.`;
     }
 
     const canContinue = isNumber && !error;
