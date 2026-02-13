@@ -1,0 +1,86 @@
+.progressBarContainer {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
+}
+
+.stepsTrack {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.stepWrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.stepWrapper:last-child {
+    flex: 0;
+}
+
+/* Connecting line between steps */
+.stepConnector {
+    flex: 1;
+    height: 3px;
+    background-color: #93c5fd;
+    margin: 0 -2px;
+    z-index: 0;
+}
+
+.stepConnector.completed {
+    background-color: #2196f3;
+}
+
+/* Step circle */
+.stepCircle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Completed step: solid blue fill with white checkmark */
+.stepCircle.completed {
+    background-color: #2196f3;
+    border: none;
+    color: white;
+}
+
+/* Current step: white fill with blue border and blue number */
+.stepCircle.current {
+    background-color: white;
+    border: 3px solid #2196f3;
+    color: #2196f3;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.15);
+}
+
+/* Upcoming step: white fill with light blue border and light text */
+.stepCircle.upcoming {
+    background-color: white;
+    border: 2px solid #93c5fd;
+    color: #93c5fd;
+}
+
+/* Checkmark SVG icon */
+.checkIcon {
+    width: 22px;
+    height: 22px;
+    stroke: white;
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
