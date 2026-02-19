@@ -6,9 +6,10 @@ import ProgressBar from "./components/ProgressBar";
 import { Instructions } from "./i18n/Instructions";
 import AgeSexInput from "./pages/AgeSex";
 import BloodPressure from "./pages/BloodPressure";
+import DiabetesSurveyIntro from "./pages/diabetes_survey/DiabetesSurveyIntro";
 import Height from "./pages/Height";
-import Results from "./pages/Results";
 import Start from "./pages/Start";
+import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
 import "./styles/progress-bar.module.css";
 
@@ -21,8 +22,8 @@ type Step =
     | "height"
     | "weightInstructions"
     | "weight"
-    | "done"
-    | "results";
+    | "summary"
+    | "diabetesIntro";
 
 // Helper function to get step number
 function getStepNumber(step: Step): number {
@@ -35,8 +36,8 @@ function getStepNumber(step: Step): number {
         height: 3,
         weightInstructions: 4,
         weight: 4,
-        results: 5,
-        done: 6,
+        summary: 5,
+        diabetesIntro: 6,
     };
     return stepMap[step];
 }
@@ -58,7 +59,7 @@ export default function App() {
 
     const currentStepNumber = getStepNumber(step);
     const totalSteps = 5;
-    const showProgress = step !== "start" && step !== "done";
+    const showProgress = step !== "start";
 
     const bpText = Instructions["bpInstructions"][language];
     const heightText = Instructions["heightInstructions"][language];
@@ -78,9 +79,7 @@ export default function App() {
                         totalSteps={totalSteps}
                     />
                 )}
-
                 {step === "start" && <Start onNext={() => setStep("ageSex")} />}
-
                 {step === "ageSex" && (
                     <AgeSexInput
                         initialAge={age ?? undefined}
@@ -96,7 +95,6 @@ export default function App() {
                         language={language}
                     />
                 )}
-
                 {step === "bpInstructions" && (
                     <InstructionWithVideo
                         title={bpText.thanks}
@@ -107,7 +105,6 @@ export default function App() {
                         onBack={() => setStep("ageSex")}
                     />
                 )}
-
                 {step === "bp" && (
                     <BloodPressure
                         initialSystolic={bloodPressure?.systolic}
@@ -122,7 +119,6 @@ export default function App() {
                         language={language}
                     />
                 )}
-
                 {step === "heightInstructions" && (
                     <InstructionWithVideo
                         title={heightText.thanks}
@@ -133,7 +129,6 @@ export default function App() {
                         onBack={() => setStep("bp")}
                     />
                 )}
-
                 {step === "height" && (
                     <Height
                         onNext={(height) => {
@@ -146,7 +141,6 @@ export default function App() {
                         language={language}
                     />
                 )}
-
                 {step === "weightInstructions" && (
                     <InstructionWithVideo
                         title={weightText.thanks}
@@ -157,12 +151,11 @@ export default function App() {
                         onBack={() => setStep("height")}
                     />
                 )}
-
                 {step === "weight" && (
                     <Weight
                         onNext={(weight) => {
                             setWeightKg(weight);
-                            setStep("results");
+                            setStep("summary");
                         }}
                         onBack={() => {
                             setStep("weightInstructions");
@@ -170,87 +163,20 @@ export default function App() {
                         language={language}
                     />
                 )}
-
-                {step === "results" && <Results />}
-
-                {step === "done" && (
-                    <div
-                        className="kioskCard"
-                        role="region"
-                        aria-label="Summary"
-                    >
-                        <div className="kioskHeader">
-                            <h1>Measurements Complete</h1>
-                            <p>Please review the values below.</p>
-                        </div>
-
-                        <div className="summaryList">
-                            <div className="summaryRow">
-                                <span className="summaryLabel">Age</span>
-                                <span className="summaryValue">
-                                    {age !== null ? `${age} years` : "—"}
-                                </span>
-                            </div>
-
-                            <div className="summaryRow">
-                                <span className="summaryLabel">
-                                    Biological Sex
-                                </span>
-                                <span className="summaryValue">
-                                    {sex !== null
-                                        ? sex === 1
-                                            ? "Male"
-                                            : sex === 2
-                                              ? "Female"
-                                              : sex === 3
-                                                ? "Intersex"
-                                                : "Prefer not to say"
-                                        : "—"}
-                                </span>
-                            </div>
-
-                            <div className="summaryRow">
-                                <span className="summaryLabel">
-                                    Blood Pressure
-                                </span>
-                                <span className="summaryValue">
-                                    {bloodPressure
-                                        ? `${bloodPressure.systolic} / ${bloodPressure.diastolic} mmHg`
-                                        : "—"}
-                                </span>
-                            </div>
-
-                            <div className="summaryRow">
-                                <span className="summaryLabel">Height</span>
-                                <span className="summaryValue">
-                                    {heightCm !== null ? `${heightCm} cm` : "—"}
-                                </span>
-                            </div>
-
-                            <div className="summaryRow">
-                                <span className="summaryLabel">Weight</span>
-                                <span className="summaryValue">
-                                    {weightKg !== null ? `${weightKg} kg` : "—"}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="actions">
-                            <button
-                                className="button"
-                                onClick={() => {
-                                    setAge(null);
-                                    setSex(null);
-                                    setBloodPressure(null);
-                                    setHeightCm(null);
-                                    setWeightKg(null);
-                                    setStep("start");
-                                }}
-                            >
-                                Start Over
-                            </button>
-                        </div>
-                    </div>
+                {step === "summary" && (
+                    <SummaryStep
+                        age={age}
+                        sex={sex}
+                        bloodPressure={bloodPressure}
+                        heightCm={heightCm}
+                        weightKg={weightKg}
+                        onNext={() => setStep("diabetesIntro")}
+                        onBack={() => setStep("weight")}
+                        language={language}
+                    />
+                )}
+                {step === "diabetesIntro" && (
+                    <DiabetesSurveyIntro onBack={() => setStep("summary")} />
                 )}
             </div>
         </div>

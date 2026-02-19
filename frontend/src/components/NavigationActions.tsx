@@ -1,12 +1,14 @@
 type Props = {
     clickBack?: () => void;
     clickNext?: () => void;
+    clickSkip?: () => void;
     disableNext?: boolean;
     nextLabel?: string;
 };
 export default function NavigationActions({
     clickBack,
     clickNext,
+    clickSkip,
     disableNext,
     nextLabel = "Continue",
 }: Props) {
@@ -28,6 +30,14 @@ export default function NavigationActions({
                 >
                     {nextLabel}
                 </button>
+            )}
+
+            {clickSkip ? (
+                <button className="button secondary" onClick={clickSkip}>
+                    Skip Survey
+                </button>
+            ) : (
+                <div />
             )}
         </div>
     );
