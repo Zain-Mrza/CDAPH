@@ -14,13 +14,13 @@ export default function DiabetesSurveyIntro({ onNext, onSkip, onBack }: Props) {
                 You will now answer some questions about your health.
             </p>
 
-            <p className="instructionText">
-                This survey takes about 15 minutes.
-            </p>
+            <li className="instructionBullet">
+                This survey takes about 15 minutes
+            </li>
 
-            <p className="instructionText">
-                You can skip any question or stop at any time.
-            </p>
+            <li className="instructionBullet">
+                You can skip the survey at any time
+            </li>
 
             <NavigationActions
                 clickNext={onNext}

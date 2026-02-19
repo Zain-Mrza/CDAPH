@@ -51,7 +51,9 @@ export default function MeasurementInput({
 
     const errorId = useId();
 
-    const [value, setValue] = useState(initialValue ?? "");
+    const [value, setValue] = useState(
+        initialValue ? initialValue.toString() : "",
+    );
     const [touched, setTouched] = useState(false);
 
     const n = Number(value);

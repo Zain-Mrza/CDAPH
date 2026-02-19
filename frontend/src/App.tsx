@@ -139,6 +139,7 @@ export default function App() {
                             setStep("heightInstructions");
                         }}
                         language={language}
+                        initialHeight={heightCm}
                     />
                 )}
                 {step === "weightInstructions" && (
@@ -161,6 +162,7 @@ export default function App() {
                             setStep("weightInstructions");
                         }}
                         language={language}
+                        initialWeight={weightKg}
                     />
                 )}
                 {step === "summary" && (
@@ -176,7 +178,11 @@ export default function App() {
                     />
                 )}
                 {step === "diabetesIntro" && (
-                    <DiabetesSurveyIntro onBack={() => setStep("summary")} />
+                    <DiabetesSurveyIntro
+                        onBack={() => setStep("summary")}
+                        onNext={() => setStep("summary")}
+                        onSkip={() => setStep("summary")}
+                    />
                 )}
             </div>
         </div>

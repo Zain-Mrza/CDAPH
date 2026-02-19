@@ -5,7 +5,8 @@
     --border: #d9e4ff;
 
     --text: #0b1220;
-    --muted: #3a4a6b;
+    --muted: #2c3b59;
+;
 
     /* Nice blue */
     --btn: #4f8dff;
@@ -142,10 +143,11 @@ body,
 }
 
 .button.secondary {
-    background: #eef2ff;
-    color: var(--text);
-    box-shadow: none;
+    background: #f6f9ff; /* slightly darker */
+    color: #0b1220;
+    border: 2px solid #a5aabb;
 }
+
 
 .button:hover {
     background: var(--btnHover);
@@ -193,6 +195,7 @@ body,
     font-weight: 650;
     color: var(--text);
 }
+
 .infoBox {
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -235,9 +238,18 @@ body,
 }
 
 .instructionText {
-    font-size: 22px;
-    line-height: 1.5;
+    font-size: 24px;
+    line-height: 1.6;
     margin: 0 0 16px;
+    color: var(--text);
+}
+
+.instructionBullet {
+    list-style-position: inside;
+    padding-left: 0rem;
+    font-size: 24px;
+    line-height: 1.4;
+    margin: 0 10px 14px;
     color: var(--text);
 }
 

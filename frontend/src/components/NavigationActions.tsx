@@ -32,12 +32,10 @@ export default function NavigationActions({
                 </button>
             )}
 
-            {clickSkip ? (
+            {clickSkip && (
                 <button className="button secondary" onClick={clickSkip}>
                     Skip Survey
                 </button>
-            ) : (
-                <div />
             )}
         </div>
     );
