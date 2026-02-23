@@ -1,4 +1,5 @@
 import MeasurementInput from "../components/MeasurementInput";
+import { loadLanguage } from "../i18n";
 
 type Props = {
     onNext: (weightKg: number) => void;
@@ -13,12 +14,15 @@ export default function Weight({
     initialWeight,
     language,
 }: Props) {
+    const t = loadLanguage(language);
+    const text = t.measurementInput.weight;
+
     return (
         <MeasurementInput
             measurement="weight"
-            title="Weight"
-            subtitle="Step onto the scale and enter the value shown."
-            label="Weight"
+            title={text.title}
+            subtitle={text.instruction}
+            label={text.label1}
             unit="kg"
             placeholder="e.g., 72"
             min={20}

@@ -1,5 +1,5 @@
 import MeasurementInput from "../components/MeasurementInput";
-import { InputInstructions } from "../i18n/measurementInput";
+import { loadLanguage } from "../i18n";
 
 type Props = {
     onNext: (heightCm: number) => void;
@@ -14,7 +14,8 @@ export default function Height({
     initialHeight,
     language,
 }: Props) {
-    const heightText = InputInstructions["height"][language];
+    const t = loadLanguage(language);
+    const heightText = t.measurementInput.height;
     return (
         <MeasurementInput
             measurement="height" // The name we send to the backend request

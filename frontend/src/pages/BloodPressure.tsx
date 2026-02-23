@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import { submitMeasurements } from "../client";
 import NavigationActions from "../components/NavigationActions";
 import Screen from "../components/Screen";
-import { InputInstructions } from "../i18n/measurementInput";
+import { loadLanguage } from "../i18n";
 
 /**
  * This file is a hacky solution to my inability to
@@ -43,7 +43,8 @@ export default function BloodPressure({
 
     const isNum = (s: string, n: number) => s !== "" && !Number.isNaN(n);
 
-    const bpText = InputInstructions["bp"][language];
+    const t = loadLanguage(language);
+    const bpText = t.measurementInput.bp;
 
     let error: string | null | undefined = null;
     if (touched) {
@@ -122,6 +123,7 @@ export default function BloodPressure({
                 clickNext={submit}
                 disableNext={!canContinue}
                 clickBack={onBack}
+                language={language}
             />
         </Screen>
     );

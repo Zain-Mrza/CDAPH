@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
 import NavigationActions from "../components/NavigationActions";
 import Screen from "../components/Screen";
-import { InputInstructions } from "../i18n/measurementInput";
+import { loadLanguage } from "../i18n";
 
 type Props = {
     onNext: (age: number, sex: number) => void;
@@ -30,7 +30,8 @@ export default function AgeSexInput({
     const ageNum = Number(age);
     const isNumber = age !== "" && !Number.isNaN(ageNum);
 
-    const text = InputInstructions["ageSex"][language];
+    const t = loadLanguage(language);
+    const text = t.measurementInput.ageSex;
 
     let error: string | null | undefined = null;
     if (touchedAge) {
@@ -141,6 +142,7 @@ export default function AgeSexInput({
                 clickNext={submit}
                 clickBack={onBack}
                 disableNext={!canContinue}
+                language={language}
             />
         </Screen>
     );

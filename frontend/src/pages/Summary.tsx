@@ -1,5 +1,5 @@
 import NavigationActions from "../components/NavigationActions";
-import { SummaryTranslations } from "../i18n/summary";
+import { loadLanguage } from "../i18n";
 
 interface BloodPressure {
     systolic: number;
@@ -27,7 +27,8 @@ export default function SummaryStep({
     onNext,
     onBack,
 }: SummaryStepProps) {
-    const text = SummaryTranslations[language];
+    const t = loadLanguage(language);
+    const text = t.summary;
     const sexLabel =
         sex === 1
             ? text.male
@@ -83,7 +84,11 @@ export default function SummaryStep({
                 </div>
             </div>
 
-            <NavigationActions clickNext={onNext} clickBack={onBack} />
+            <NavigationActions
+                clickNext={onNext}
+                clickBack={onBack}
+                language={language}
+            />
         </div>
     );
 }
