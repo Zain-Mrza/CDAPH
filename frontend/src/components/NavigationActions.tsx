@@ -1,22 +1,28 @@
+import { loadLanguage } from "../i18n";
+
 type Props = {
     clickBack?: () => void;
     clickNext?: () => void;
     clickSkip?: () => void;
     disableNext?: boolean;
     nextLabel?: string;
+    language: "en" | "es";
 };
 export default function NavigationActions({
     clickBack,
     clickNext,
     clickSkip,
     disableNext,
-    nextLabel = "Continue",
+    language = "en",
 }: Props) {
+    const t = loadLanguage(language);
+    const text = t.NavigationText;
+
     return (
         <div className="actions">
             {clickBack ? (
                 <button className="button secondary" onClick={clickBack}>
-                    Back
+                    {text.back}
                 </button>
             ) : (
                 <div />
@@ -28,13 +34,13 @@ export default function NavigationActions({
                     onClick={clickNext}
                     disabled={disableNext}
                 >
-                    {nextLabel}
+                    {text.next}
                 </button>
             )}
 
             {clickSkip && (
                 <button className="button secondary" onClick={clickSkip}>
-                    Skip Survey
+                    {text.skipSurvey}
                 </button>
             )}
         </div>
