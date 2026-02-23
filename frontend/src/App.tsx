@@ -3,7 +3,6 @@ import stockVideo from "./assets/stock.mp4";
 import InstructionWithVideo from "./components/InstructionWithVideo";
 import LanguageSelector from "./components/LanguageSelector";
 import ProgressBar from "./components/ProgressBar";
-import { Instructions } from "./i18n/Instructions";
 import AgeSexInput from "./pages/AgeSex";
 import BloodPressure from "./pages/BloodPressure";
 import DiabetesSurveyIntro from "./pages/diabetes_survey/DiabetesSurveyIntro";
@@ -61,10 +60,6 @@ export default function App() {
     const totalSteps = 5;
     const showProgress = step !== "start";
 
-    const bpText = Instructions["bpInstructions"][language];
-    const heightText = Instructions["heightInstructions"][language];
-    const weightText = Instructions["weightInstructions"][language];
-
     return (
         <div className="kioskShell">
             <LanguageSelector
@@ -97,12 +92,12 @@ export default function App() {
                 )}
                 {step === "bpInstructions" && (
                     <InstructionWithVideo
-                        title={bpText.thanks}
-                        instructionText={bpText.instruction}
                         videoSrc={stockVideo}
                         videoAlt="How to place your arm in the blood pressure cuff"
                         onContinue={() => setStep("bp")}
                         onBack={() => setStep("ageSex")}
+                        language={language}
+                        instructionType="bpInstructions"
                     />
                 )}
                 {step === "bp" && (
@@ -121,12 +116,12 @@ export default function App() {
                 )}
                 {step === "heightInstructions" && (
                     <InstructionWithVideo
-                        title={heightText.thanks}
-                        instructionText={heightText.instruction}
                         videoSrc={stockVideo}
                         videoAlt="How to use the stadiometer"
                         onContinue={() => setStep("height")}
                         onBack={() => setStep("bp")}
+                        language={language}
+                        instructionType="heightInstructions"
                     />
                 )}
                 {step === "height" && (
@@ -144,12 +139,12 @@ export default function App() {
                 )}
                 {step === "weightInstructions" && (
                     <InstructionWithVideo
-                        title={weightText.thanks}
-                        instructionText={weightText.instruction}
                         videoSrc={stockVideo}
                         videoAlt="How to use the weight scale"
                         onContinue={() => setStep("weight")}
                         onBack={() => setStep("height")}
+                        language={language}
+                        instructionType="weightInstructions"
                     />
                 )}
                 {step === "weight" && (
