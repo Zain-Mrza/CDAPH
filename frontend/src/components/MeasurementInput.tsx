@@ -116,6 +116,7 @@ export default function MeasurementInput({
                 clickNext={submit}
                 clickBack={onBack}
                 disableNext={!canContinue}
+                language={language}
             />
         </Screen>
     );
