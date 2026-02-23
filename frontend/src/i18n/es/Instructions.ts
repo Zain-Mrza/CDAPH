@@ -1,14 +1,6 @@
-type InstructionStep =
-    | "bpInstructions"
-    | "heightInstructions"
-    | "weightInstructions";
+import type { InstructionTypes } from "../types";
 
-export interface InstructionMessages {
-    thanks: string;
-    instruction: string;
-}
-
-export const Instructions: Record<InstructionStep, InstructionMessages> = {
+export const Instructions: InstructionTypes = {
     bpInstructions: {
         thanks: "¡Gracias!",
         instruction:
