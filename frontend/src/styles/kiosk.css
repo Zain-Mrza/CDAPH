@@ -6,8 +6,6 @@
 
     --text: #0b1220;
     --muted: #2c3b59;
-;
-
     /* Nice blue */
     --btn: #4f8dff;
     --btnHover: #3f7eff;
@@ -148,6 +146,24 @@ body,
     border: 2px solid #a5aabb;
 }
 
+.button.skip {
+    background: transparent;
+    color: #4b5563; /* neutral gray */
+    border: 2px solid #d1d5db; /* light gray border */
+}
+
+.button.skip:hover {
+    background: #f3f4f6; /* subtle hover */
+}
+
+.button.skip:active {
+    background: #e5e7eb;
+}
+
+.button.skip:focus-visible {
+    outline: 3px solid #3b82f6; /* accessible focus ring */
+    outline-offset: 2px;
+}
 
 .button:hover {
     background: var(--btnHover);
@@ -248,8 +264,8 @@ body,
     list-style-position: inside;
     padding-left: 0rem;
     font-size: 24px;
-    line-height: 1.4;
-    margin: 0 10px 14px;
+    line-height: 1.7;
+    margin: 0 0px 0px;
     color: var(--text);
 }
 
@@ -297,4 +313,29 @@ body,
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.kioskHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Top row */
+.actions-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Bottom row */
+.actions-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -47,7 +47,7 @@ export default function SummaryStep({
 
             <div className="summaryList">
                 <div className="summaryRow">
-                    <span className="summaryLabel">Age</span>
+                    <span className="summaryLabel">{text.age}</span>
                     <span className="summaryValue">
                         {age !== null ? `${age} ${text.years}` : "—"}
                     </span>

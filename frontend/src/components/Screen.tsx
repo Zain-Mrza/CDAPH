@@ -5,6 +5,9 @@ type Props = {
     subtitle?: string;
     children: ReactNode;
     ariaLabel?: string;
+    onSkip?: () => void;
+    skipLabel?: string;
+    headerAction?: ReactNode;
 };
 
 export default function Screen({
@@ -12,6 +15,8 @@ export default function Screen({
     subtitle,
     children,
     ariaLabel,
+    onSkip,
+    skipLabel = "Skip",
 }: Props) {
     return (
         <div
@@ -20,9 +25,19 @@ export default function Screen({
             aria-label={ariaLabel ?? title}
         >
             <div className="kioskHeader">
-                <h1>{title}</h1>
+                <div className="kioskHeaderRow">
+                    <h1>{title}</h1>
+
+                    {onSkip && (
+                        <button className="button skip" onClick={onSkip}>
+                            {skipLabel}
+                        </button>
+                    )}
+                </div>
+
                 {subtitle && <p>{subtitle}</p>}
             </div>
+
             {children}
         </div>
     );

@@ -177,6 +177,7 @@ export default function App() {
                         onBack={() => setStep("summary")}
                         onNext={() => setStep("summary")}
                         onSkip={() => setStep("summary")}
+                        language={language}
                     />
                 )}
             </div>
