@@ -5,7 +5,7 @@ type Props = {
     clickNext?: () => void;
     disableNext?: boolean;
     nextLabel?: string;
-    language: "en" | "es";
+    language?: "en" | "es";
 };
 
 export default function NavigationActions({

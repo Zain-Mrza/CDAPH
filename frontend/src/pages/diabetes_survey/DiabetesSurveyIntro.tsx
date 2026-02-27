@@ -29,14 +29,16 @@ export default function DiabetesSurveyIntro({
                 You will now answer some questions about your health.
             </p>
 
-            <ul>
-                <li className="instructionBullet">
-                    This survey takes about 15 minutes.
-                </li>
-                <li className="instructionBullet">
-                    You may skip the survey at any time.
-                </li>
-            </ul>
+            <div className="infoBox">
+                <ul>
+                    <li className="instructionBullet">
+                        This survey takes about 15 minutes.
+                    </li>
+                    <li className="instructionBullet">
+                        You may skip the survey at any time.
+                    </li>
+                </ul>
+            </div>
 
             <NavigationActions
                 clickNext={onNext}
