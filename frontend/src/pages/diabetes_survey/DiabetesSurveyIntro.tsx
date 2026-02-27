@@ -17,13 +17,14 @@ export default function DiabetesSurveyIntro({
     return (
         <Screen title="Diabetes Risk Survey" onSkip={onSkip}>
             <p className="instructionText">
-                You will now answer some questions about your health.
+                We will now ask two questions to help assess your risk for
+                diabetes.
             </p>
 
             <div className="infoBox">
                 <ul>
                     <li className="instructionBullet">
-                        This survey takes about 15 minutes.
+                        This survey takes about 1 minute.
                     </li>
                     <li className="instructionBullet">
                         You may skip the survey at any time.
@@ -34,7 +35,6 @@ export default function DiabetesSurveyIntro({
             <NavigationActions
                 clickNext={onNext}
                 clickBack={onBack}
-                nextLabel="Start Survey"
                 language={language}
             />
         </Screen>

@@ -10,6 +10,7 @@ import Height from "./pages/Height";
 import Start from "./pages/Start";
 import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
+import RelativeWithDiabetes from "./pages/diabetes_survey/Relative";
 import "./styles/progress-bar.module.css";
 
 type Step =
@@ -22,7 +23,8 @@ type Step =
     | "weightInstructions"
     | "weight"
     | "summary"
-    | "diabetesIntro";
+    | "diabetesIntro"
+    | "diabetesFirst";
 
 // Helper function to get step number
 function getStepNumber(step: Step): number {
@@ -37,6 +39,7 @@ function getStepNumber(step: Step): number {
         weight: 4,
         summary: 5,
         diabetesIntro: 6,
+        diabetesFirst: 7,
     };
     return stepMap[step];
 }
@@ -57,7 +60,7 @@ export default function App() {
     const [weightKg, setWeightKg] = useState<number | null>(null);
 
     const currentStepNumber = getStepNumber(step);
-    const totalSteps = 5;
+    const totalSteps = 7;
     const showProgress = step !== "start";
 
     return (
@@ -175,6 +178,14 @@ export default function App() {
                 {step === "diabetesIntro" && (
                     <DiabetesSurveyIntro
                         onBack={() => setStep("summary")}
+                        onNext={() => setStep("diabetesFirst")}
+                        onSkip={() => setStep("summary")}
+                        language={language}
+                    />
+                )}
+                {step === "diabetesFirst" && (
+                    <RelativeWithDiabetes
+                        onBack={() => setStep("diabetesIntro")}
                         onNext={() => setStep("summary")}
                         onSkip={() => setStep("summary")}
                         language={language}

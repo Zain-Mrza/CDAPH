@@ -37,7 +37,7 @@ export default function AgeSexInput({
     if (touchedAge) {
         if (!isNumber) {
             error = text.error1;
-        } else if (ageNum < 0) {
+        } else if (ageNum < 18) {
             error = text.error2;
         } else if (ageNum > 120) {
             error = text.error3;

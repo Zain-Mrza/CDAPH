@@ -7,7 +7,7 @@ while True:
     if line == "READY":
         break
 
-data = "ABKJSFHKJDSHLJKFHC"
+data = "CODEWORD"
 encoded_data = data.encode("utf-8")
 
 bytes = ser.write(encoded_data)

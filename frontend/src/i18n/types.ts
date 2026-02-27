@@ -43,6 +43,7 @@ export interface MeasurementInputTypes {
 
 export interface NavigationTypes {
     next: string;
+    nextQuestion: string;
     back: string;
     skipSurvey: string;
 }

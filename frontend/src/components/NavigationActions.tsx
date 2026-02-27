@@ -4,7 +4,6 @@ type Props = {
     clickBack?: () => void;
     clickNext?: () => void;
     disableNext?: boolean;
-    nextLabel?: string;
     language?: "en" | "es";
 };
 

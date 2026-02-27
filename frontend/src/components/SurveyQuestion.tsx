@@ -7,6 +7,7 @@ type Props = {
     ariaLabel?: string;
     onSkip?: () => void;
     skipLabel?: string;
+    headerAction?: ReactNode;
 };
 
 export default function Screen({

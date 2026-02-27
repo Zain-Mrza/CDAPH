@@ -12,7 +12,7 @@ export const InputInstructions: MeasurementInputTypes = {
         helper4: "Prefiero no responder",
         helper5: "años",
         error1: "Por favor, ingrese un número.",
-        error2: "La edad debe ser al menos 0.",
+        error2: "Debes tener 18 años o más.",
         error3: "La edad debe ser como máximo 120.",
         error4: "Por favor, seleccione una opción válida.",
     },
