@@ -15,16 +15,7 @@ export default function DiabetesSurveyIntro({
     language,
 }: Props) {
     return (
-        <Screen
-            title="Diabetes Risk Survey"
-            headerAction={
-                onSkip ? (
-                    <button className="button skip" onClick={onSkip}>
-                        Skip Survey
-                    </button>
-                ) : null
-            }
-        >
+        <Screen title="Diabetes Risk Survey" onSkip={onSkip}>
             <p className="instructionText">
                 You will now answer some questions about your health.
             </p>

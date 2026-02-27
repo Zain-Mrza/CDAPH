@@ -16,7 +16,7 @@ export default function Screen({
     children,
     ariaLabel,
     onSkip,
-    skipLabel = "Skip",
+    skipLabel = "Skip this Survey",
 }: Props) {
     return (
         <div
