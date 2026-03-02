@@ -1,20 +1,22 @@
 import serial
 
+# Establish serial port, Arduino response is NOT INSTANT
 ser = serial.Serial(port="COM3", baudrate=9600)
 
+# Wait for Arduino to send ready code
 while True:
     line = ser.readline().decode("utf-8").strip()
     if line == "READY":
         break
 
+# Encode and write data to Arduino
 data = "CODEWORD"
 encoded_data = data.encode("utf-8")
-
 bytes = ser.write(encoded_data)
-print(f"Writing data: {encoded_data}, {bytes} bytes")
 
 
 try:
+    # Read incoming data from Arduino
     while True:
         raw_data = ser.readline()
 
