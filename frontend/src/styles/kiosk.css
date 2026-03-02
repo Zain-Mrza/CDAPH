@@ -150,6 +150,7 @@ body,
     background: transparent;
     color: #4b5563; /* neutral gray */
     border: 2px solid #d1d5db; /* light gray border */
+    right: 10px
 }
 
 .button.skip:hover {

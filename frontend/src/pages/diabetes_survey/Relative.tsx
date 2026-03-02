@@ -1,5 +1,5 @@
 import NavigationActions from "../../components/NavigationActions";
-import Screen from "../../components/Screen";
+import SurveyQuestion from "../../components/SurveyQuestion";
 
 type Props = {
     onNext?: () => void;
@@ -15,19 +15,25 @@ export default function RelativeWithDiabetes({
     language,
 }: Props) {
     return (
-        <Screen
-            title="Question 1: Do you have a parent or sibling with diabetes?"
+        <SurveyQuestion
+            question="Do you have a parent or sibling with diabetes?"
+            questionNumber={1}
+            maxQuestionNumber={1}
             onSkip={onSkip}
         >
-            <button type="button" className="choiceButton">
-                Yes
-            </button>
-
+            <div className="multipleChoice">
+                <button type="button" className="choiceButton">
+                    Yes
+                </button>
+                <button type="button" className="choiceButton">
+                    No
+                </button>
+            </div>
             <NavigationActions
                 clickNext={onNext}
                 clickBack={onBack}
                 language={language}
             />
-        </Screen>
+        </SurveyQuestion>
     );
 }

@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
 
 type Props = {
-    title: string;
+    question: string;
+    questionNumber: number;
+    maxQuestionNumber: number;
     subtitle?: string;
     children: ReactNode;
     ariaLabel?: string;
@@ -10,8 +12,10 @@ type Props = {
     headerAction?: ReactNode;
 };
 
-export default function Screen({
-    title,
+export default function SurveyQuestion({
+    question,
+    questionNumber,
+    maxQuestionNumber,
     subtitle,
     children,
     ariaLabel,
@@ -22,17 +26,23 @@ export default function Screen({
         <div
             className="kioskCard"
             role="region"
-            aria-label={ariaLabel ?? title}
+            aria-label={ariaLabel ?? question}
         >
-            <div className="kioskHeader">
+            <div className="actions-header">
+                {onSkip && (
+                    <button className="button skip" onClick={onSkip}>
+                        {skipLabel}
+                    </button>
+                )}
+            </div>
+            <div className="surveyHeader">
+                <div>
+                    <h1 className="surveyHeaderQuestion">
+                        Question {questionNumber} of {maxQuestionNumber}
+                    </h1>
+                </div>
                 <div className="kioskHeaderRow">
-                    <h1>{title}</h1>
-
-                    {onSkip && (
-                        <button className="button skip" onClick={onSkip}>
-                            {skipLabel}
-                        </button>
-                    )}
+                    <h1>{question}</h1>
                 </div>
 
                 {subtitle && <p>{subtitle}</p>}

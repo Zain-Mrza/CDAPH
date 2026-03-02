@@ -1,0 +1,19 @@
+.surveyHeader h1 {
+    margin: 0 0 8px;
+    font-size: 44px;
+    letter-spacing: 0.2px;
+}
+
+.surveyHeader p {
+    margin: 0 0 24px;
+    color: var(--muted);
+    font-size: 22px;
+    line-height: 1.5;
+}
+
+.surveyHeaderQuestion {
+    margin: 0 0 8px;
+    font-size: 30px;
+    letter-spacing: 0.2px;
+    color: #4d4d4d
+}
