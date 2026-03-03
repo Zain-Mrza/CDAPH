@@ -28,7 +28,11 @@ export default function SurveyQuestion({
             role="region"
             aria-label={ariaLabel ?? question}
         >
-            <div className="actions-header">
+            <div className="survey-header">
+                <h1 className="surveyHeaderQuestionNumber">
+                    Question {questionNumber} of {maxQuestionNumber}
+                </h1>
+
                 {onSkip && (
                     <button className="button skip" onClick={onSkip}>
                         {skipLabel}
@@ -36,12 +40,8 @@ export default function SurveyQuestion({
                 )}
             </div>
             <div className="surveyHeader">
-                <div>
-                    <h1 className="surveyHeaderQuestion">
-                        Question {questionNumber} of {maxQuestionNumber}
-                    </h1>
-                </div>
-                <div className="kioskHeaderRow">
+                <div></div>
+                <div className="surveyHeaderQuestion">
                     <h1>{question}</h1>
                 </div>
 
