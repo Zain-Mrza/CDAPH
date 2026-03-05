@@ -9,28 +9,27 @@ type Props = {
     language: "en" | "es";
 };
 
-export default function RelativeQuestion({
+export default function PhysicallyActiveQuestion({
     onNext,
-    onSkip,
     onBack,
+    onSkip,
     language,
 }: Props) {
     const [answer, setAnswer] = useState<boolean | null>(null);
 
     return (
         <SurveyQuestion
-            question="Do you have a parent or sibling with diabetes?"
-            questionNumber={1}
-            maxQuestionNumber={1}
+            question="Physically active"
+            subtitle="Self-reported by patient"
+            questionNumber={2}
+            maxQuestionNumber={2}
             onSkip={onSkip}
         >
             <div className="multipleChoice">
                 <button
                     type="button"
                     className={`surveyButton ${answer === true ? "selected" : ""}`}
-                    onClick={() => {
-                        setAnswer(true);
-                    }}
+                    onClick={() => setAnswer(true)}
                 >
                     Yes
                 </button>
@@ -38,9 +37,7 @@ export default function RelativeQuestion({
                 <button
                     type="button"
                     className={`surveyButton ${answer === false ? "selected" : ""}`}
-                    onClick={() => {
-                        setAnswer(false);
-                    }}
+                    onClick={() => setAnswer(false)}
                 >
                     No
                 </button>
