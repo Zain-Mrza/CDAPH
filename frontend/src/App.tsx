@@ -59,6 +59,10 @@ export default function App() {
     const [heightCm, setHeightCm] = useState<number | null>(null);
     const [weightKg, setWeightKg] = useState<number | null>(null);
 
+    const [relativeWithDiabetes, setRelativeWithDiabetes] = useState<
+        boolean | null
+    >(null);
+
     const currentStepNumber = getStepNumber(step);
     const totalSteps = 7;
     const showProgress = step !== "start";
@@ -186,7 +190,10 @@ export default function App() {
                 {step === "diabetesFirst" && (
                     <RelativeWithDiabetes
                         onBack={() => setStep("diabetesIntro")}
-                        onNext={() => setStep("summary")}
+                        onNext={(boolean) => {
+                            setStep("summary");
+                            setRelativeWithDiabetes(boolean);
+                        }}
                         onSkip={() => setStep("summary")}
                         language={language}
                     />

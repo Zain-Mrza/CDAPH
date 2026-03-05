@@ -16,3 +16,33 @@
     display: flex;
     justify-content: space-between;
 }
+
+.surveyButton {
+    padding: 18px 24px;
+    font-size: 40px;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    background: #ffffff;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 200px;
+}
+
+.surveyButton:hover {
+    border-color: var(--focus);
+    background: rgba(47, 107, 255, 0.05);
+}
+
+.surveyButton.selected {
+    border-color: var(--focus);
+    background: var(--btn);
+    color: var(--btnText);
+    font-weight: 650;
+}
+
+.surveyButton:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+}
