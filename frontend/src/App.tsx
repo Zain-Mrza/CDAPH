@@ -10,62 +10,43 @@ import Height from "./pages/Height";
 import Start from "./pages/Start";
 import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
-import RelativeWithDiabetes from "./pages/diabetes_survey/Relative";
+import RelativeQuestion from "./pages/diabetes_survey/Relative";
+import { useNavigation } from "./navigation/useNavigation";
 import "./styles/progress-bar.module.css";
-
-type Step =
-    | "start"
-    | "ageSex"
-    | "bpInstructions"
-    | "bp"
-    | "heightInstructions"
-    | "height"
-    | "weightInstructions"
-    | "weight"
-    | "summary"
-    | "diabetesIntro"
-    | "diabetesFirst";
-
-// Helper function to get step number
-function getStepNumber(step: Step): number {
-    const stepMap: Record<Step, number> = {
-        start: 0,
-        ageSex: 1,
-        bpInstructions: 2,
-        bp: 2,
-        heightInstructions: 3,
-        height: 3,
-        weightInstructions: 4,
-        weight: 4,
-        summary: 5,
-        diabetesIntro: 6,
-        diabetesFirst: 7,
-    };
-    return stepMap[step];
-}
+import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfDiabetes";
+import PhysicallyActiveQuestion from "./pages/diabetes_survey/PhysicallyActive";
 
 export default function App() {
     const [language, setLanguage] = useState<"en" | "es">("en");
-    const [step, setStep] = useState<Step>("start");
 
     const [age, setAge] = useState<number | null>(null);
     const [sex, setSex] = useState<number | null>(null);
-
     const [bloodPressure, setBloodPressure] = useState<{
         systolic: number;
         diastolic: number;
     } | null>(null);
-
     const [heightCm, setHeightCm] = useState<number | null>(null);
     const [weightKg, setWeightKg] = useState<number | null>(null);
-
     const [relativeWithDiabetes, setRelativeWithDiabetes] = useState<
         boolean | null
     >(null);
 
-    const currentStepNumber = getStepNumber(step);
-    const totalSteps = 7;
-    const showProgress = step !== "start";
+    const {
+        step,
+        goNext,
+        goBack,
+        goSkip,
+        showProgress,
+        currentStepNumber,
+        totalSteps,
+    } = useNavigation({
+        age,
+        sex,
+        bloodPressure,
+        heightCm,
+        weightKg,
+        relativeWithDiabetes,
+    });
 
     return (
         <div className="kioskShell">
@@ -81,7 +62,9 @@ export default function App() {
                         totalSteps={totalSteps}
                     />
                 )}
-                {step === "start" && <Start onNext={() => setStep("ageSex")} />}
+
+                {step === "start" && <Start onNext={goNext} />}
+
                 {step === "ageSex" && (
                     <AgeSexInput
                         initialAge={age ?? undefined}
@@ -89,84 +72,83 @@ export default function App() {
                         onNext={(age, sex) => {
                             setAge(age);
                             setSex(sex);
-                            setStep("bpInstructions");
+                            goNext();
                         }}
-                        onBack={() => {
-                            setStep("start");
-                        }}
+                        onBack={goBack}
                         language={language}
                     />
                 )}
+
                 {step === "bpInstructions" && (
                     <InstructionWithVideo
                         videoSrc={stockVideo}
                         videoAlt="How to place your arm in the blood pressure cuff"
-                        onContinue={() => setStep("bp")}
-                        onBack={() => setStep("ageSex")}
+                        onContinue={goNext}
+                        onBack={goBack}
                         language={language}
                         instructionType="bpInstructions"
                     />
                 )}
+
                 {step === "bp" && (
                     <BloodPressure
                         initialSystolic={bloodPressure?.systolic}
                         initialDiastolic={bloodPressure?.diastolic}
                         onNext={(systolic, diastolic) => {
                             setBloodPressure({ systolic, diastolic });
-                            setStep("heightInstructions");
+                            goNext();
                         }}
-                        onBack={() => {
-                            setStep("bpInstructions");
-                        }}
+                        onBack={goBack}
                         language={language}
                     />
                 )}
+
                 {step === "heightInstructions" && (
                     <InstructionWithVideo
                         videoSrc={stockVideo}
                         videoAlt="How to use the stadiometer"
-                        onContinue={() => setStep("height")}
-                        onBack={() => setStep("bp")}
+                        onContinue={goNext}
+                        onBack={goBack}
                         language={language}
                         instructionType="heightInstructions"
                     />
                 )}
+
                 {step === "height" && (
                     <Height
+                        initialHeight={heightCm}
                         onNext={(height) => {
                             setHeightCm(height);
-                            setStep("weightInstructions");
+                            goNext();
                         }}
-                        onBack={() => {
-                            setStep("heightInstructions");
-                        }}
+                        onBack={goBack}
                         language={language}
-                        initialHeight={heightCm}
                     />
                 )}
+
                 {step === "weightInstructions" && (
                     <InstructionWithVideo
                         videoSrc={stockVideo}
                         videoAlt="How to use the weight scale"
-                        onContinue={() => setStep("weight")}
-                        onBack={() => setStep("height")}
+                        onContinue={goNext}
+                        onBack={goBack}
                         language={language}
                         instructionType="weightInstructions"
                     />
                 )}
+
                 {step === "weight" && (
                     <Weight
+                        initialWeight={weightKg}
                         onNext={(weight) => {
                             setWeightKg(weight);
-                            setStep("summary");
+                            goNext();
                         }}
-                        onBack={() => {
-                            setStep("weightInstructions");
-                        }}
+                        onBack={goBack}
                         language={language}
-                        initialWeight={weightKg}
                     />
                 )}
+
                 {step === "summary" && (
                     <SummaryStep
                         age={age}
@@ -174,27 +156,52 @@ export default function App() {
                         bloodPressure={bloodPressure}
                         heightCm={heightCm}
                         weightKg={weightKg}
-                        onNext={() => setStep("diabetesIntro")}
-                        onBack={() => setStep("weight")}
+                        onNext={goNext}
+                        onBack={goBack}
                         language={language}
                     />
                 )}
+
                 {step === "diabetesIntro" && (
                     <DiabetesSurveyIntro
-                        onBack={() => setStep("summary")}
-                        onNext={() => setStep("diabetesFirst")}
-                        onSkip={() => setStep("summary")}
+                        onNext={goNext}
+                        onBack={goBack}
+                        onSkip={goSkip}
                         language={language}
                     />
                 )}
+
                 {step === "diabetesFirst" && (
-                    <RelativeWithDiabetes
-                        onBack={() => setStep("diabetesIntro")}
-                        onNext={(boolean) => {
-                            setStep("summary");
-                            setRelativeWithDiabetes(boolean);
+                    <RelativeQuestion
+                        onNext={(hasRelative) => {
+                            setRelativeWithDiabetes(hasRelative);
+                            goNext();
                         }}
-                        onSkip={() => setStep("summary")}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                    />
+                )}
+
+                {step === "diabetesSecond" && (
+                    <HypertensionQuestion
+                        onNext={(answer) => {
+                            setRelativeWithDiabetes(answer);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                    />
+                )}
+                {step === "diabetesThird" && (
+                    <PhysicallyActiveQuestion
+                        onNext={(answer) => {
+                            // Need ro add state for this question
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
                         language={language}
                     />
                 )}
