@@ -36,6 +36,34 @@ export const submitMeasurements = async (
     return res.json();
 };
 
+/* Submit diabetes survey data */
+export interface DiabetesSurveyPayload {
+    age: number | null;
+    gender: number | null;
+    firstDegreeRelative: boolean | null;
+    hypertension: boolean | null;
+    physicallyActive: boolean | null;
+    weight: number | null;
+    height: number | null;
+}
+
+export const submitDiabetesSurvey = async (payload: DiabetesSurveyPayload) => {
+    const response = await fetch("/api/diabetes-risk", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to calculate diabetes risk");
+    }
+
+    return response.json();
+};
+
+/* Getting results */ // Idk I need to delete this eventually
 export const getResults = async () => {
     const res = await fetch("/api/risk", {
         method: "GET",

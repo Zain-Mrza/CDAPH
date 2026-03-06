@@ -1,7 +1,8 @@
-from algorithms.algorithms import bp_risk, calculate_bmi
+from algorithms.algorithms import bp_risk, calculate_bmi, calculate_diabetes_risk
 from flask import Blueprint, jsonify, request
 from state import patient_state
 
+print("SERIAL state id:", id(patient_state))
 api = Blueprint("api", __name__, url_prefix="/api")
 
 
@@ -34,6 +35,22 @@ def submit_measurement():
     return jsonify({"status": f"{measurement_type} stored"}), 200
 
 
+@api.route("/diabetes-risk", methods=["POST"])
+def diabetes_risk():
+    data = request.json
+
+    result = calculate_diabetes_risk(
+        age=data["age"],
+        gender=data["gender"],
+        first_degree_relative=data["firstDegreeRelative"],
+        hypertension=data["hypertension"],
+        physically_active=data["physicallyActive"],
+        bmi=data["bmi"],
+    )
+
+    return jsonify(result)
+
+
 # -----------------------------
 # Final risk computation
 # -----------------------------
@@ -53,6 +70,19 @@ def run_risk():
     bmi = calculate_bmi(patient_state["weight_kg"], patient_state["height_cm"])
 
     return jsonify({"bp": hypertension, "bmi": bmi, "inputs": patient_state}), 200
+
+
+@api.route("/stadiometer", methods=["GET"])
+def get_height():
+
+    print(patient_state)
+    height = patient_state.get("height_cm")
+
+    if height is None:
+        print("bello")
+        return jsonify({"status": "waiting"}), 200
+
+    return jsonify({"status": "ready", "height_cm": str(height)}), 200
 
 
 # -----------------------------
