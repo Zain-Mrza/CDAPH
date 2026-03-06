@@ -1,5 +1,6 @@
 import MeasurementInput from "../components/MeasurementInput";
 import { loadLanguage } from "../i18n";
+import { useState, useEffect } from "react";
 
 type Props = {
     onNext: (heightCm: number) => void;
@@ -14,6 +15,23 @@ export default function Height({
     initialHeight,
     language,
 }: Props) {
+    const [height, setHeight] = useState<number | null>(null);
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const res = await fetch("/api/stadiometer");
+            const data = await res.json();
+
+            if (data.status === "ready") {
+                setHeight(data.height_cm); // height = whatever is passed from Arduino
+                console.log(data.height_cm);
+                clearInterval(interval);
+            }
+        }, 500);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const t = loadLanguage(language);
     const heightText = t.measurementInput.height;
     return (
@@ -29,7 +47,7 @@ export default function Height({
             onSubmit={onNext}
             onBack={onBack}
             buttonText="Continue"
-            initialValue={initialHeight}
+            initialValue={initialHeight ?? height}
             language={language}
         />
     );

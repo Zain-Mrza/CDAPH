@@ -47,8 +47,16 @@ export const stepFlow: Record<Step, StepConfig> = {
     diabetesFirst: {
         next: "diabetesSecond",
         back: "diabetesIntro",
-        skip: "summary",
+        skip: "diabetesThird",
     },
-    diabetesSecond: { next: "summary", back: "diabetesFirst", skip: "summary" },
-    diabetesThird: { next: "summary", back: "diabetesSecond", skip: "summary" },
+    diabetesSecond: {
+        next: "diabetesThird",
+        back: "diabetesFirst",
+        skip: "diabetesThird",
+    },
+    diabetesThird: {
+        next: "diabetesIntro",
+        back: "diabetesSecond",
+        skip: "diabetesIntro",
+    },
 };

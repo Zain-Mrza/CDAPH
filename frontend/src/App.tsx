@@ -15,10 +15,13 @@ import { useNavigation } from "./navigation/useNavigation";
 import "./styles/progress-bar.module.css";
 import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfDiabetes";
 import PhysicallyActiveQuestion from "./pages/diabetes_survey/PhysicallyActive";
+import { submitDiabetesSurvey } from "./client";
 
 export default function App() {
+    /* Language state */
     const [language, setLanguage] = useState<"en" | "es">("en");
 
+    /* Measurement input states */
     const [age, setAge] = useState<number | null>(null);
     const [sex, setSex] = useState<number | null>(null);
     const [bloodPressure, setBloodPressure] = useState<{
@@ -27,9 +30,17 @@ export default function App() {
     } | null>(null);
     const [heightCm, setHeightCm] = useState<number | null>(null);
     const [weightKg, setWeightKg] = useState<number | null>(null);
+
+    /* Diabetes survey states */
     const [relativeWithDiabetes, setRelativeWithDiabetes] = useState<
         boolean | null
     >(null);
+    const [hypertensionHistory, setHypertensionHistory] = useState<
+        boolean | null
+    >(null);
+    const [physicallyActive, setPhysicallyActive] = useState<boolean | null>(
+        null,
+    );
 
     const {
         step,
@@ -63,7 +74,9 @@ export default function App() {
                     />
                 )}
 
-                {step === "start" && <Start onNext={goNext} />}
+                {step === "start" && (
+                    <Start onNext={goNext} language={language} />
+                )}
 
                 {step === "ageSex" && (
                     <AgeSexInput
@@ -186,7 +199,7 @@ export default function App() {
                 {step === "diabetesSecond" && (
                     <HypertensionQuestion
                         onNext={(answer) => {
-                            setRelativeWithDiabetes(answer);
+                            setHypertensionHistory(answer);
                             goNext();
                         }}
                         onBack={goBack}
@@ -197,8 +210,18 @@ export default function App() {
                 {step === "diabetesThird" && (
                     <PhysicallyActiveQuestion
                         onNext={(answer) => {
-                            // Need ro add state for this question
+                            // Need to add state for this question
+                            setPhysicallyActive(answer);
                             goNext();
+                            submitDiabetesSurvey({
+                                age: age,
+                                gender: sex,
+                                firstDegreeRelative: relativeWithDiabetes,
+                                hypertension: hypertensionHistory,
+                                physicallyActive: physicallyActive,
+                                weight: weightKg,
+                                height: heightCm,
+                            });
                         }}
                         onBack={goBack}
                         onSkip={goSkip}

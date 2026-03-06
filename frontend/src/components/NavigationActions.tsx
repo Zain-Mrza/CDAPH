@@ -1,10 +1,12 @@
 import { loadLanguage } from "../i18n";
+import type { NavigationTypes } from "../i18n/types";
 
 type Props = {
     clickBack?: () => void;
     clickNext?: () => void;
     disableNext?: boolean;
     language?: "en" | "es";
+    nextLabel?: keyof NavigationTypes;
 };
 
 export default function NavigationActions({
@@ -12,6 +14,7 @@ export default function NavigationActions({
     clickNext,
     disableNext,
     language = "en",
+    nextLabel = "next",
 }: Props) {
     const t = loadLanguage(language);
     const text = t.NavigationText;
@@ -32,7 +35,7 @@ export default function NavigationActions({
                     onClick={clickNext}
                     disabled={disableNext}
                 >
-                    {text.next}
+                    {text[nextLabel]}
                 </button>
             )}
         </div>

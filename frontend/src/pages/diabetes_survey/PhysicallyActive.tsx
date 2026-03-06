@@ -48,6 +48,7 @@ export default function PhysicallyActiveQuestion({
                 clickBack={onBack}
                 language={language}
                 disableNext={answer === null}
+                nextLabel="skipSurvey"
             />
         </SurveyQuestion>
     );

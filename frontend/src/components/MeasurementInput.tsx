@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useState, useEffect } from "react";
 import { type MeasurementType, submitMeasurements } from "../client";
 import NavigationActions from "./NavigationActions";
 import Screen from "./Screen";
@@ -15,7 +15,7 @@ type Props = {
     max?: number;
     onSubmit: (value: number) => void;
     buttonText?: string;
-    onBack?: () => void; // Function that will be passed all the way from App.tsx to move back
+    onBack?: () => void;
     initialValue?: number | null;
     language: "en" | "es";
 };
@@ -47,21 +47,39 @@ export default function MeasurementInput({
             maxError: "El valor debe ser como máximo",
         },
     };
-    const inputId = useId();
 
+    const inputId = useId();
     const errorId = useId();
 
-    const [value, setValue] = useState(
-        initialValue ? initialValue.toString() : "",
+    const text = MeasurementInputText[language];
+
+    const [value, setValue] = useState(() =>
+        initialValue !== null && initialValue !== undefined
+            ? initialValue.toString()
+            : "",
     );
+
     const [touched, setTouched] = useState(false);
+    const [userEdited, setUserEdited] = useState(false);
+
+    // Sync Arduino measurement only if user hasn't typed yet
+    useEffect(() => {
+        if (userEdited) return;
+        if (initialValue === null || initialValue === undefined) return;
+
+        const next = initialValue.toString();
+
+        if (value !== next) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setValue(next);
+        }
+    }, [initialValue, userEdited, value]);
 
     const n = Number(value);
     const isNumber = value !== "" && !Number.isNaN(n);
 
-    const text = MeasurementInputText[language];
-
     let error: string | null = null;
+
     if (touched) {
         if (!isNumber) error = text.error;
         else if (min !== undefined && n < min)
@@ -74,6 +92,7 @@ export default function MeasurementInput({
 
     function submit() {
         setTouched(true);
+
         if (canContinue) {
             onSubmit(n);
             submitMeasurements(measurement, n);
@@ -93,7 +112,10 @@ export default function MeasurementInput({
                         inputMode="numeric"
                         value={value}
                         placeholder={placeholder}
-                        onChange={(e) => setValue(e.target.value)}
+                        onChange={(e) => {
+                            setUserEdited(true);
+                            setValue(e.target.value);
+                        }}
                         onBlur={() => setTouched(true)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") submit();
@@ -101,6 +123,7 @@ export default function MeasurementInput({
                         aria-invalid={Boolean(error)}
                         aria-describedby={error ? errorId : undefined}
                     />
+
                     {unit && <span className="unit">{unit}</span>}
                 </div>
 
@@ -112,6 +135,7 @@ export default function MeasurementInput({
                     </div>
                 )}
             </div>
+
             <NavigationActions
                 clickNext={submit}
                 clickBack={onBack}

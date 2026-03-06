@@ -1,6 +1,7 @@
 import NavigationActions from "./NavigationActions";
 import Screen from "./Screen";
 import { loadLanguage } from "../i18n";
+import type { NavigationTypes } from "../i18n/types";
 
 type InstructionStep =
     | "bpInstructions"
@@ -13,8 +14,8 @@ type Props = {
     videoAlt?: string;
     onContinue: () => void;
     onBack?: () => void;
-    buttonText?: string;
     language: "en" | "es";
+    nextLabel?: keyof NavigationTypes;
     instructionType: InstructionStep;
 };
 
@@ -24,8 +25,8 @@ export default function InstructionWithVideo({
     videoAlt = "Instructional video",
     onContinue,
     onBack,
-    buttonText = "Continue",
     language,
+    nextLabel = "next",
     instructionType,
 }: Props) {
     const t = loadLanguage(language);
@@ -58,7 +59,7 @@ export default function InstructionWithVideo({
             <NavigationActions
                 clickNext={onContinue}
                 clickBack={onBack}
-                nextLabel={buttonText}
+                nextLabel={nextLabel}
                 language={language}
             />
         </Screen>

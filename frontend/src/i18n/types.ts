@@ -42,10 +42,12 @@ export interface MeasurementInputTypes {
 }
 
 export interface NavigationTypes {
+    start: string;
     next: string;
     nextQuestion: string;
     back: string;
     skipSurvey: string;
+    completeSurvey: string;
 }
 
 export interface InstructionTypes {
