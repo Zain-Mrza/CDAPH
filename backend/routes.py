@@ -37,7 +37,7 @@ def submit_measurement():
 
 @api.route("/diabetes-risk", methods=["POST"])
 def diabetes_risk():
-    data = request.json
+    data = request.get_json()
 
     result = calculate_diabetes_risk(
         age=data["age"],
@@ -45,7 +45,7 @@ def diabetes_risk():
         first_degree_relative=data["firstDegreeRelative"],
         hypertension=data["hypertension"],
         physically_active=data["physicallyActive"],
-        bmi=data["bmi"],
+        bmi=calculate_bmi(patient_state["weight_kg"], patient_state["height_cm"]),
     )
 
     return jsonify(result)
@@ -75,11 +75,10 @@ def run_risk():
 @api.route("/stadiometer", methods=["GET"])
 def get_height():
 
-    print(patient_state)
+    # Pull from patient state (Arduino just set it)
     height = patient_state.get("height_cm")
 
     if height is None:
-        print("bello")
         return jsonify({"status": "waiting"}), 200
 
     return jsonify({"status": "ready", "height_cm": str(height)}), 200

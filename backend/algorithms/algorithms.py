@@ -29,6 +29,7 @@ def calculate_bmi(
 def calculate_diabetes_risk(
     age, gender, first_degree_relative, hypertension, physically_active, bmi
 ):
+    width = 0
     score = 0
 
     # Age
@@ -40,20 +41,28 @@ def calculate_diabetes_risk(
         score += 1
 
     # Gender
-    if gender.lower() == "male":
+    if gender == 1:
         score += 1
+    elif gender in [3, 4]:
+        width += 1
 
     # Family history
     if first_degree_relative:
         score += 1
+    else:
+        width += 1
 
     # Hypertension
     if hypertension:
         score += 1
+    else:
+        width += 1
 
-    # Physical activity (No = +1)
+    # Physical activity
     if not physically_active:
         score += 1
+    else:
+        width += 1
 
     # BMI
     if bmi >= 40:
@@ -63,25 +72,17 @@ def calculate_diabetes_risk(
     elif bmi >= 25:
         score += 1
 
+    high_end = score + width
+
     # Risk classification
     if score >= 5:
         risk_level = "high"
-        recommendations = [
-            "Patient is at high risk for type 2 diabetes.",
-            "Recommend confirmatory testing (fasting glucose or HbA1c).",
-            "Counsel on lifestyle modifications such as diet and exercise.",
-            "Consider referral to diabetes prevention programs or nutrition specialists.",
-        ]
-    else:
+    elif high_end < 5:
         risk_level = "low"
-        recommendations = [
-            "Provide general advice on maintaining a healthy lifestyle.",
-            "Reassess risk periodically.",
-            "The patient may still be at risk for type 2 diabetes.",
-        ]
+    else:
+        risk_level = "inconclusive"
 
     return {
         "score": score,
-        "risk_level": risk_level,
-        "recommendations": recommendations,
+        "risk": risk_level,
     }
