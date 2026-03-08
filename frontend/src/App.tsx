@@ -13,9 +13,11 @@ import Weight from "./pages/Weight";
 import RelativeQuestion from "./pages/diabetes_survey/Relative";
 import { useNavigation } from "./navigation/useNavigation";
 import "./styles/progress-bar.module.css";
-import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfDiabetes";
+import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfHypertension";
 import PhysicallyActiveQuestion from "./pages/diabetes_survey/PhysicallyActive";
 import { submitDiabetesSurvey } from "./client";
+import DiabetesSurveyReview from "./pages/diabetes_survey/diabetesSummary";
+import DiabetesResults from "./pages/diabetes_survey/diabetesResult";
 
 export default function App() {
     /* Language state */
@@ -33,12 +35,15 @@ export default function App() {
 
     /* Diabetes survey states */
     const [relativeWithDiabetes, setRelativeWithDiabetes] = useState<
-        boolean | null
-    >(null);
+        boolean | null | undefined
+    >(undefined);
     const [hypertensionHistory, setHypertensionHistory] = useState<
-        boolean | null
-    >(null);
-    const [physicallyActive, setPhysicallyActive] = useState<boolean | null>(
+        boolean | null | undefined
+    >(undefined);
+    const [physicallyActive, setPhysicallyActive] = useState<
+        boolean | null | undefined
+    >(undefined);
+    const [diabetesRiskScore, setDiabetesRiskScore] = useState<number | null>(
         null,
     );
 
@@ -58,6 +63,20 @@ export default function App() {
         weightKg,
         relativeWithDiabetes,
     });
+
+    const handleDiabetesCalculation = async () => {
+        const { score, risk } = await submitDiabetesSurvey({
+            age,
+            gender: sex,
+            firstDegreeRelative: relativeWithDiabetes,
+            hypertension: hypertensionHistory,
+            physicallyActive: physicallyActive,
+            weight: weightKg,
+            height: heightCm,
+        });
+
+        setDiabetesRiskScore(risk);
+    };
 
     return (
         <div className="kioskShell">
@@ -193,6 +212,7 @@ export default function App() {
                         onBack={goBack}
                         onSkip={goSkip}
                         language={language}
+                        initialValue={relativeWithDiabetes}
                     />
                 )}
 
@@ -205,27 +225,44 @@ export default function App() {
                         onBack={goBack}
                         onSkip={goSkip}
                         language={language}
+                        initialValue={hypertensionHistory}
                     />
                 )}
                 {step === "diabetesThird" && (
                     <PhysicallyActiveQuestion
                         onNext={(answer) => {
-                            // Need to add state for this question
                             setPhysicallyActive(answer);
                             goNext();
-                            submitDiabetesSurvey({
-                                age: age,
-                                gender: sex,
-                                firstDegreeRelative: relativeWithDiabetes,
-                                hypertension: hypertensionHistory,
-                                physicallyActive: physicallyActive,
-                                weight: weightKg,
-                                height: heightCm,
-                            });
                         }}
                         onBack={goBack}
                         onSkip={goSkip}
                         language={language}
+                        initialValue={physicallyActive}
+                    />
+                )}
+
+                {step === "diabetesSummary" && (
+                    <DiabetesSurveyReview
+                        relativeWithDiabetes={relativeWithDiabetes}
+                        hypertensionHistory={hypertensionHistory}
+                        physicallyActive={physicallyActive}
+                        onNext={() => {
+                            handleDiabetesCalculation();
+                            goNext();
+                            console.log(diabetesRiskScore);
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                    />
+                )}
+
+                {step === "diabetesResults" && (
+                    <DiabetesResults
+                        language={language}
+                        score={diabetesRiskScore}
+                        onBack={goBack}
+                        onNext={goNext}
                     />
                 )}
             </div>

@@ -7,6 +7,7 @@ type Props = {
     onBack?: () => void;
     onSkip?: () => void;
     language: "en" | "es";
+    initialValue: boolean | null | undefined;
 };
 
 export default function RelativeQuestion({
@@ -14,17 +15,20 @@ export default function RelativeQuestion({
     onSkip,
     onBack,
     language,
+    initialValue,
 }: Props) {
-    const [answer, setAnswer] = useState<boolean | null>(null);
+    const [answer, setAnswer] = useState<boolean | undefined | null>(
+        initialValue,
+    );
 
     return (
         <SurveyQuestion
             question="Do you have a parent or sibling with diabetes?"
             questionNumber={1}
-            maxQuestionNumber={1}
+            maxQuestionNumber={3}
             onSkip={onSkip}
         >
-            <div className="multipleChoice">
+            <div className="surveyMultipleChoice">
                 <button
                     type="button"
                     className={`surveyButton ${answer === true ? "selected" : ""}`}
@@ -44,13 +48,21 @@ export default function RelativeQuestion({
                 >
                     No
                 </button>
+
+                <button
+                    type="button"
+                    className={`surveyButton ${answer === null ? "selected" : ""}`}
+                    onClick={() => setAnswer(null)}
+                >
+                    I don't know
+                </button>
             </div>
 
             <NavigationActions
                 clickNext={() => onNext?.(answer!)}
                 clickBack={onBack}
                 language={language}
-                disableNext={answer === null}
+                disableNext={answer === undefined}
             />
         </SurveyQuestion>
     );

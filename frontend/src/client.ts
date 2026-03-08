@@ -40,14 +40,21 @@ export const submitMeasurements = async (
 export interface DiabetesSurveyPayload {
     age: number | null;
     gender: number | null;
-    firstDegreeRelative: boolean | null;
-    hypertension: boolean | null;
-    physicallyActive: boolean | null;
+    firstDegreeRelative: boolean | null | undefined;
+    hypertension: boolean | null | undefined;
+    physicallyActive: boolean | null | undefined;
     weight: number | null;
     height: number | null;
 }
 
-export const submitDiabetesSurvey = async (payload: DiabetesSurveyPayload) => {
+interface DiabetesRiskResponse {
+    score: number;
+    risk: "low" | "high" | "inconclusive";
+}
+
+export const submitDiabetesSurvey = async (
+    payload: DiabetesSurveyPayload,
+): Promise<DiabetesRiskResponse> => {
     const response = await fetch("/api/diabetes-risk", {
         method: "POST",
         headers: {
@@ -60,7 +67,7 @@ export const submitDiabetesSurvey = async (payload: DiabetesSurveyPayload) => {
         throw new Error("Failed to calculate diabetes risk");
     }
 
-    return response.json();
+    return await response.json();
 };
 
 /* Getting results */ // Idk I need to delete this eventually

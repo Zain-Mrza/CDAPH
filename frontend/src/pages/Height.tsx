@@ -19,6 +19,7 @@ export default function Height({
 
     useEffect(() => {
         const interval = setInterval(async () => {
+            // Maybe rate limit
             const res = await fetch("/api/stadiometer");
             const data = await res.json();
 

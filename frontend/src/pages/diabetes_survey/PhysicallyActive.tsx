@@ -7,6 +7,7 @@ type Props = {
     onBack?: () => void;
     onSkip?: () => void;
     language: "en" | "es";
+    initialValue: boolean | null | undefined;
 };
 
 export default function PhysicallyActiveQuestion({
@@ -14,18 +15,20 @@ export default function PhysicallyActiveQuestion({
     onBack,
     onSkip,
     language,
+    initialValue,
 }: Props) {
-    const [answer, setAnswer] = useState<boolean | null>(null);
+    const [answer, setAnswer] = useState<boolean | null | undefined>(
+        initialValue,
+    );
 
     return (
         <SurveyQuestion
-            question="Physically active"
-            subtitle="Self-reported by patient"
-            questionNumber={2}
-            maxQuestionNumber={2}
+            question="Are you physically active?"
+            questionNumber={3}
+            maxQuestionNumber={3}
             onSkip={onSkip}
         >
-            <div className="multipleChoice">
+            <div className="surveyMultipleChoice">
                 <button
                     type="button"
                     className={`surveyButton ${answer === true ? "selected" : ""}`}
@@ -41,14 +44,22 @@ export default function PhysicallyActiveQuestion({
                 >
                     No
                 </button>
+
+                <button
+                    type="button"
+                    className={`surveyButton ${answer === null ? "selected" : ""}`}
+                    onClick={() => setAnswer(null)}
+                >
+                    I don't know
+                </button>
             </div>
 
             <NavigationActions
                 clickNext={() => onNext?.(answer!)}
                 clickBack={onBack}
                 language={language}
-                disableNext={answer === null}
-                nextLabel="skipSurvey"
+                disableNext={answer === undefined}
+                nextLabel="completeSurvey"
             />
         </SurveyQuestion>
     );

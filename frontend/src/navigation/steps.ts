@@ -12,6 +12,8 @@ export const steps = [
     "diabetesFirst",
     "diabetesSecond",
     "diabetesThird",
+    "diabetesSummary",
+    "diabetesResults",
 ] as const;
 
 export type Step = (typeof steps)[number];
@@ -22,7 +24,7 @@ export type AppState = {
     bloodPressure: { systolic: number; diastolic: number } | null;
     heightCm: number | null;
     weightKg: number | null;
-    relativeWithDiabetes: boolean | null;
+    relativeWithDiabetes: boolean | null | undefined;
 };
 
 type StepTarget = Step | ((state: AppState) => Step);
@@ -55,8 +57,16 @@ export const stepFlow: Record<Step, StepConfig> = {
         skip: "diabetesThird",
     },
     diabetesThird: {
-        next: "diabetesIntro",
+        next: "diabetesSummary",
         back: "diabetesSecond",
         skip: "diabetesIntro",
+    },
+    diabetesSummary: {
+        next: "diabetesResults",
+        back: "diabetesThird",
+    },
+    diabetesResults: {
+        next: "diabetesThird",
+        back: "diabetesSummary",
     },
 };
