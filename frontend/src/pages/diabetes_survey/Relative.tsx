@@ -2,12 +2,14 @@ import { useState } from "react";
 import NavigationActions from "../../components/NavigationActions";
 import SurveyQuestion from "../../components/SurveyQuestion";
 
+type Answer = boolean | "unknown" | "unavailable" | undefined;
+
 type Props = {
     onNext?: (value: boolean | "unknown" | "unavailable") => void;
     onBack?: () => void;
     onSkip?: () => void;
     language: "en" | "es";
-    initialValue: boolean | "unknown" | "unavailable";
+    initialValue?: boolean | "unknown" | "unavailable";
 };
 
 export default function RelativeQuestion({
@@ -17,9 +19,7 @@ export default function RelativeQuestion({
     language,
     initialValue,
 }: Props) {
-    const [answer, setAnswer] = useState<boolean | "unknown" | "unavailable">(
-        initialValue,
-    );
+    const [answer, setAnswer] = useState<Answer>(initialValue);
 
     return (
         <SurveyQuestion
@@ -28,38 +28,59 @@ export default function RelativeQuestion({
             maxQuestionNumber={3}
             onSkip={onSkip}
         >
-            <div className="surveyMultipleChoice">
-                <button
-                    type="button"
-                    className={`surveyButton ${answer === true ? "selected" : ""}`}
-                    onClick={() => {
-                        setAnswer(true);
-                    }}
-                >
-                    Yes
-                </button>
+            <fieldset className="surveyFieldset">
+                <legend className="srOnly">
+                    Do you have a parent, sibling, or child with diabetes?
+                </legend>
 
-                <button
-                    type="button"
-                    className={`surveyButton ${answer === false ? "selected" : ""}`}
-                    onClick={() => {
-                        setAnswer(false);
-                    }}
-                >
-                    No
-                </button>
+                <div className="surveyMultipleChoice">
+                    <label
+                        className={`surveyButton ${answer === true ? "selected" : ""}`}
+                    >
+                        <input
+                            type="radio"
+                            name="familyHistoryDiabetes"
+                            value="yes"
+                            checked={answer === true}
+                            onChange={() => setAnswer(true)}
+                        />
+                        <span>Yes</span>
+                    </label>
 
-                <button
-                    type="button"
-                    className={`surveyButton ${answer === "unknown" ? "selected" : ""}`}
-                    onClick={() => setAnswer("unknown")}
-                >
-                    I don't know
-                </button>
-            </div>
+                    <label
+                        className={`surveyButton ${answer === false ? "selected" : ""}`}
+                    >
+                        <input
+                            type="radio"
+                            name="familyHistoryDiabetes"
+                            value="no"
+                            checked={answer === false}
+                            onChange={() => setAnswer(false)}
+                        />
+                        <span>No</span>
+                    </label>
+
+                    <label
+                        className={`surveyButton ${answer === "unknown" ? "selected" : ""}`}
+                    >
+                        <input
+                            type="radio"
+                            name="familyHistoryDiabetes"
+                            value="unknown"
+                            checked={answer === "unknown"}
+                            onChange={() => setAnswer("unknown")}
+                        />
+                        <span>I don't know</span>
+                    </label>
+                </div>
+            </fieldset>
 
             <NavigationActions
-                clickNext={() => onNext?.(answer!)}
+                clickNext={() => {
+                    if (answer !== undefined) {
+                        onNext?.(answer);
+                    }
+                }}
                 clickBack={onBack}
                 language={language}
                 disableNext={answer === undefined}
