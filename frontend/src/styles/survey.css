@@ -60,70 +60,52 @@
     width: min(600px, 60%);
 }
 
-.result-score-box {
-    margin: 1.5rem 0 1rem 0;
-    padding: 1.25rem;
-    border-radius: 16px;
-    background: #f5f7fb;
+.resultsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     text-align: center;
 }
 
-.result-score-label {
-    font-size: 1rem;
-    color: #4b5563;
-    margin-bottom: 0.5rem;
+.scoreSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.result-score-value {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1;
-}
-
-.result-banner {
-    margin: 1rem 0 1.5rem 0;
-    padding: 1rem 1.25rem;
-    border-radius: 16px;
-}
-
-.result-banner-high {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.result-banner-low {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.result-banner-label {
-    font-size: 0.95rem;
-    opacity: 0.85;
-}
-
-.result-banner-value {
+.scoreLabel {
     font-size: 1.5rem;
-    font-weight: 700;
-    margin-top: 0.25rem;
+    color: #666;
 }
 
-.result-heading {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+.scoreValue {
+    font-size: 4rem;
+    font-weight: bold;
 }
 
-.result-list {
-    padding-left: 1.5rem;
-    margin-bottom: 1.5rem;
+.riskBanner {
+    font-size: 4rem;
+    font-weight: 600;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.result-list li {
-    margin-bottom: 0.75rem;
-    line-height: 1.5;
+.riskHigh {
+    background-color: #ffe0e0;
+    color: #b00020;
 }
 
-.result-note {
-    font-size: 0.95rem;
-    color: #4b5563;
-    margin-bottom: 2rem;
+.riskLow {
+    background-color: #e6f6ea;
+    color: #1a7f37;
+}
+
+.resultExplanation {
+    text-align: left;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.resultExplanation ul {
+    margin-top: 10px;
 }

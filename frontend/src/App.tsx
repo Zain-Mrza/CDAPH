@@ -1,23 +1,23 @@
 import { useState } from "react";
 import stockVideo from "./assets/stock.mp4";
+import { submitDiabetesSurvey } from "./client";
 import InstructionWithVideo from "./components/InstructionWithVideo";
 import LanguageSelector from "./components/LanguageSelector";
 import ProgressBar from "./components/ProgressBar";
+import { useNavigation } from "./navigation/useNavigation";
 import AgeSexInput from "./pages/AgeSex";
 import BloodPressure from "./pages/BloodPressure";
+import DiabetesResults from "./pages/diabetes_survey/diabetesResult";
+import DiabetesSurveyReview from "./pages/diabetes_survey/diabetesSummary";
 import DiabetesSurveyIntro from "./pages/diabetes_survey/DiabetesSurveyIntro";
+import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfHypertension";
+import PhysicallyActiveQuestion from "./pages/diabetes_survey/PhysicallyActive";
+import RelativeQuestion from "./pages/diabetes_survey/Relative";
 import Height from "./pages/Height";
 import Start from "./pages/Start";
 import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
-import RelativeQuestion from "./pages/diabetes_survey/Relative";
-import { useNavigation } from "./navigation/useNavigation";
 import "./styles/progress-bar.module.css";
-import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfHypertension";
-import PhysicallyActiveQuestion from "./pages/diabetes_survey/PhysicallyActive";
-import { submitDiabetesSurvey } from "./client";
-import DiabetesSurveyReview from "./pages/diabetes_survey/diabetesSummary";
-import DiabetesResults from "./pages/diabetes_survey/diabetesResult";
 
 export default function App() {
     /* Language state */
@@ -75,7 +75,7 @@ export default function App() {
             height: heightCm,
         });
 
-        setDiabetesRiskScore(risk);
+        setDiabetesRiskScore(score);
     };
 
     return (
