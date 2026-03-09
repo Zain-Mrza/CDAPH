@@ -27,7 +27,7 @@ def calculate_bmi(
 
 
 def calculate_diabetes_risk(
-    age, gender, first_degree_relative, hypertension, physically_active, bmi
+    age, sex, first_degree_relative, hypertension, physically_active, bmi
 ):
     width = 0
     score = 0
@@ -40,28 +40,28 @@ def calculate_diabetes_risk(
     elif age >= 40:
         score += 1
 
-    # Gender
-    if gender == 1:
+    # Sex
+    if sex == 1:
         score += 1
-    elif gender in [3, 4]:
+    elif sex in [3, 4]:
         width += 1
 
     # Family history
-    if first_degree_relative:
+    if first_degree_relative is True:
         score += 1
-    else:
+    elif first_degree_relative == "unknown":
         width += 1
 
     # Hypertension
-    if hypertension:
+    if hypertension is True:
         score += 1
-    else:
+    elif hypertension == "unknown":
         width += 1
 
     # Physical activity
-    if not physically_active:
+    if physically_active is False:
         score += 1
-    else:
+    elif physically_active == "unknown":
         width += 1
 
     # BMI
@@ -85,4 +85,5 @@ def calculate_diabetes_risk(
     return {
         "score": score,
         "risk": risk_level,
+        "possible": high_end,
     }

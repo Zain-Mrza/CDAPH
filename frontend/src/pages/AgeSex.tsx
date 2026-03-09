@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import NavigationActions from "../components/NavigationActions";
 import Screen from "../components/Screen";
 import { loadLanguage } from "../i18n";
+import { submitMeasurements } from "../client";
 
 type Props = {
     onNext: (age: number, sex: number) => void;
@@ -50,6 +51,8 @@ export default function AgeSexInput({
         setTouchedAge(true);
         setTouchedSex(true);
         if (canContinue && sex !== null) {
+            submitMeasurements("age", ageNum);
+            submitMeasurements("sex", sex);
             onNext(ageNum, sex);
         }
     }

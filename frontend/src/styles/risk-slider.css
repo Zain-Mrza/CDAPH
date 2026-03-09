@@ -89,23 +89,100 @@
     width: 100%;
 }
 
+.riskScaleLegend {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #425066;
+}
+
+.riskLegendItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.riskLegendSwatch {
+    display: inline-block;
+    border-radius: 999px;
+    flex: 0 0 auto;
+}
+
+.riskLegendSwatchScore {
+    width: 18px;
+    height: 18px;
+    background: #0b132b;
+}
+
+.riskLegendSwatchThreshold {
+    width: 6px;
+    height: 22px;
+    background: #ffffff;
+    border: 2px solid #0b132b;
+    border-radius: 6px;
+}
+
 .riskGradientBar {
     position: relative;
     width: 100%;
     height: 34px;
     border-radius: 999px;
     background: linear-gradient(90deg, #2ecc71 0%, #f1c40f 50%, #e74c3c 100%);
+    overflow: visible;
+    margin-top: 40px;
 }
 
 .riskScaleMarker {
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.riskScaleMarkerScore {
     width: 18px;
     height: 56px;
     border-radius: 999px;
     background: #0b132b;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+    z-index: 3;
+}
+
+.riskScaleMarkerThreshold {
+    width: 8px;
+    height: 50px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 2px solid #0b132b;
+    z-index: 2;
+}
+
+.riskScaleMarkerLabel {
+    position: absolute;
+    top: calc(100% + 12px);
+    transform: translateX(-50%);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-top: 5px;
+}
+
+.riskScaleMarkerLabelScore {
+    background: #0b132b;
+    color: #ffffff;
+    z-index: 4;
+}
+
+.riskScaleMarkerLabelThreshold {
+    background: #ffffff;
+    color: #0b132b;
+    border: 1px solid #cfd8e3;
+    z-index: 1;
 }
 
 .riskAxisLabels,
@@ -145,4 +222,24 @@
 
 .resultExplanation li {
     margin-bottom: 8px;
+}
+
+.riskRangeConnector {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 999px;
+    background: #0b132b;
+    z-index: 1;
+}
+
+.riskSummaryBadge.inconclusive {
+    background: #fff7e6;
+    border-color: #f2d39b;
+    color: #92400e;
+}
+
+.riskSummaryBadge.inconclusive .riskSummaryBadgeDot {
+    background: #d97706;
 }

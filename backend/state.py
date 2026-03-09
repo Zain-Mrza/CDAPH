@@ -1,7 +1,8 @@
 patient_state = {
+    "age": None,
     "blood_pressure": None,
     "height_cm": None,
     "weight_kg": None,
     "waist_cm": None,
-    "visual_acuity": None
+    "visual_acuity": None,
 }

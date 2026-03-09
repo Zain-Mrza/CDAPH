@@ -17,7 +17,7 @@ export default function DiabetesSurveyIntro({
     return (
         <Screen title="Diabetes Risk Survey" onSkip={onSkip}>
             <p className="instructionText">
-                We will now ask two questions to help assess your risk for
+                We will now ask three questions to help assess your risk for
                 diabetes.
             </p>
 

@@ -8,7 +8,9 @@ export type MeasurementType =
     | "height"
     | "weight"
     | "waist"
-    | "visual_acuity";
+    | "visual_acuity"
+    | "age"
+    | "sex";
 
 export async function healthCheck() {
     const res = await fetch("/api/health");
@@ -38,18 +40,15 @@ export const submitMeasurements = async (
 
 /* Submit diabetes survey data */
 export interface DiabetesSurveyPayload {
-    age: number | null;
-    gender: number | null;
-    firstDegreeRelative: boolean | null | undefined;
-    hypertension: boolean | null | undefined;
-    physicallyActive: boolean | null | undefined;
-    weight: number | null;
-    height: number | null;
+    firstDegreeRelative: boolean | "unknown" | "unavailable";
+    hypertension: boolean | "unknown" | "unavailable";
+    physicallyActive: boolean | "unknown" | "unavailable";
 }
 
 interface DiabetesRiskResponse {
-    score: number;
+    score: number | null;
     risk: "low" | "high" | "inconclusive";
+    possible: number | null;
 }
 
 export const submitDiabetesSurvey = async (

@@ -3,6 +3,8 @@ import RiskSlider from "../../components/RiskSlider";
 
 type Props = {
     score: number | null;
+    risk: string | null;
+    possible: number | null;
     language: "en" | "es";
     onFinish?: () => void;
     onBack: () => void;
@@ -11,6 +13,8 @@ type Props = {
 
 export default function DiabetesResults({
     score,
+    risk,
+    possible,
     language,
     onFinish,
     onBack,
@@ -32,17 +36,23 @@ export default function DiabetesResults({
         );
     }
 
-    const isHighRisk = score >= 5;
+    const isHighRisk = risk === "high";
+    const isBorderline = risk === "inconclusive";
 
     return (
         <div className="kioskCard">
             <h1 className="title">Diabetes Risk Results</h1>
 
             <div className="resultsContainer">
-                <RiskSlider score={score} conditionName="Diabetes" />
+                <RiskSlider
+                    score={score}
+                    risk={risk}
+                    possible={possible}
+                    conditionName="Diabetes"
+                />
 
                 <div className="resultExplanation">
-                    {isHighRisk ? (
+                    {isHighRisk || isBorderline ? (
                         <>
                             <p>
                                 Your answers suggest that you may be at an

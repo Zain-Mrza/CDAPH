@@ -24,7 +24,10 @@ export type AppState = {
     bloodPressure: { systolic: number; diastolic: number } | null;
     heightCm: number | null;
     weightKg: number | null;
-    relativeWithDiabetes: boolean | null | undefined;
+
+    relativeWithDiabetes: boolean | "unknown" | "unavailable";
+    hypertensionHistory: boolean | "unknown" | "unavailable";
+    physicallyActive: boolean | "unknown" | "unavailable";
 };
 
 type StepTarget = Step | ((state: AppState) => Step);

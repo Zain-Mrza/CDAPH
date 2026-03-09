@@ -2,9 +2,9 @@ import NavigationActions from "../../components/NavigationActions";
 import Screen from "../../components/Screen";
 
 type Props = {
-    relativeWithDiabetes: boolean | null | undefined;
-    hypertensionHistory: boolean | null | undefined;
-    physicallyActive: boolean | null | undefined;
+    relativeWithDiabetes: boolean | "unknown" | "unavailable";
+    hypertensionHistory: boolean | "unknown" | "unavailable";
+    physicallyActive: boolean | "unknown" | "unavailable";
     onNext?: () => void;
     onBack?: () => void;
     onSkip?: () => void;
@@ -20,8 +20,9 @@ export default function DiabetesSurveyReview({
     onSkip,
     language,
 }: Props) {
-    const formatAnswer = (value: boolean | null | undefined) => {
-        if (value === undefined) return "Not answered";
+    const formatAnswer = (value: boolean | "unknown" | "unavailable") => {
+        if (value === "unavailable") return "Not answered";
+        if (value === "unknown") return "I don't know";
         return value ? "Yes" : "No";
     };
 
@@ -32,28 +33,28 @@ export default function DiabetesSurveyReview({
                 calculate your diabetes risk.
             </p>
 
-            <div className="reviewBox">
-                <div className="reviewRow">
-                    <span className="reviewQuestion">
-                        Parent or sibling with diabetes
+            <div className="summaryList">
+                <div className="summaryRow">
+                    <span className="summaryLabel">
+                        Parent, sibling, or child with diabetes
                     </span>
-                    <span className="reviewAnswer">
+                    <span className="summaryValue">
                         {formatAnswer(relativeWithDiabetes)}
                     </span>
                 </div>
 
-                <div className="reviewRow">
-                    <span className="reviewQuestion">
+                <div className="summaryRow">
+                    <span className="summaryLabel">
                         History of hypertension
                     </span>
-                    <span className="reviewAnswer">
+                    <span className="summaryValue">
                         {formatAnswer(hypertensionHistory)}
                     </span>
                 </div>
 
-                <div className="reviewRow">
-                    <span className="reviewQuestion">Physically active</span>
-                    <span className="reviewAnswer">
+                <div className="summaryRow">
+                    <span className="summaryLabel">Physically active</span>
+                    <span className="summaryValue">
                         {formatAnswer(physicallyActive)}
                     </span>
                 </div>

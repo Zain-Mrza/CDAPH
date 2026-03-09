@@ -3,11 +3,11 @@ import NavigationActions from "../../components/NavigationActions";
 import SurveyQuestion from "../../components/SurveyQuestion";
 
 type Props = {
-    onNext?: (value: boolean) => void;
+    onNext?: (value: boolean | "unknown" | "unavailable") => void;
     onBack?: () => void;
     onSkip?: () => void;
     language: "en" | "es";
-    initialValue: boolean | null | undefined;
+    initialValue: boolean | "unknown" | "unavailable";
 };
 
 export default function RelativeQuestion({
@@ -17,13 +17,13 @@ export default function RelativeQuestion({
     language,
     initialValue,
 }: Props) {
-    const [answer, setAnswer] = useState<boolean | undefined | null>(
+    const [answer, setAnswer] = useState<boolean | "unknown" | "unavailable">(
         initialValue,
     );
 
     return (
         <SurveyQuestion
-            question="Do you have a parent or sibling with diabetes?"
+            question="Do you have a parent, sibling, or child with diabetes?"
             questionNumber={1}
             maxQuestionNumber={3}
             onSkip={onSkip}
@@ -51,8 +51,8 @@ export default function RelativeQuestion({
 
                 <button
                     type="button"
-                    className={`surveyButton ${answer === null ? "selected" : ""}`}
-                    onClick={() => setAnswer(null)}
+                    className={`surveyButton ${answer === "unknown" ? "selected" : ""}`}
+                    onClick={() => setAnswer("unknown")}
                 >
                     I don't know
                 </button>

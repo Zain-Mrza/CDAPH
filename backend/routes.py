@@ -13,21 +13,28 @@ def submit_measurement():
     measurement_type = data.get("measurement")
     value = data.get("value")
 
+    if measurement_type == "age":
+        patient_state["age"] = int(round(float(value)))
+        print(data)
+
+    if measurement_type == "sex":
+        patient_state["sex"] = value
+
     if measurement_type == "bp":
         systolic, diastolic = value.split("/")
         patient_state["blood_pressure"] = {
-            "systolic": int(systolic),
-            "diastolic": int(diastolic),
+            "systolic": int(round(float(systolic))),
+            "diastolic": int(round(float(diastolic))),
         }
 
     elif measurement_type == "height":
-        patient_state["height_cm"] = float(value)
+        patient_state["height_cm"] = int(round(float(value)))
 
     elif measurement_type == "weight":
-        patient_state["weight_kg"] = float(value)
+        patient_state["weight_kg"] = int(round(float(value)))
 
     elif measurement_type == "waist":
-        patient_state["waist_cm"] = float(value)
+        patient_state["waist_cm"] = int(round(float(value)))
 
     else:
         return jsonify({"error": "unknown measurement type"}), 400
@@ -39,9 +46,11 @@ def submit_measurement():
 def diabetes_risk():
     data = request.get_json()
 
+    print(data)
+
     result = calculate_diabetes_risk(
-        age=data["age"],
-        gender=data["gender"],
+        age=patient_state["age"],
+        sex=patient_state["sex"],
         first_degree_relative=data["firstDegreeRelative"],
         hypertension=data["hypertension"],
         physically_active=data["physicallyActive"],

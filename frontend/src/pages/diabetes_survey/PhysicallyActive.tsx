@@ -3,11 +3,11 @@ import NavigationActions from "../../components/NavigationActions";
 import SurveyQuestion from "../../components/SurveyQuestion";
 
 type Props = {
-    onNext?: (value: boolean) => void;
+    onNext?: (value: boolean | "unknown" | "unavailable") => void;
     onBack?: () => void;
     onSkip?: () => void;
     language: "en" | "es";
-    initialValue: boolean | null | undefined;
+    initialValue: boolean | "unknown" | "unavailable";
 };
 
 export default function PhysicallyActiveQuestion({
@@ -17,7 +17,7 @@ export default function PhysicallyActiveQuestion({
     language,
     initialValue,
 }: Props) {
-    const [answer, setAnswer] = useState<boolean | null | undefined>(
+    const [answer, setAnswer] = useState<boolean | "unknown" | "unavailable">(
         initialValue,
     );
 
@@ -47,15 +47,15 @@ export default function PhysicallyActiveQuestion({
 
                 <button
                     type="button"
-                    className={`surveyButton ${answer === null ? "selected" : ""}`}
-                    onClick={() => setAnswer(null)}
+                    className={`surveyButton ${answer === "unknown" ? "selected" : ""}`}
+                    onClick={() => setAnswer("unknown")}
                 >
                     I don't know
                 </button>
             </div>
 
             <NavigationActions
-                clickNext={() => onNext?.(answer!)}
+                clickNext={() => onNext!(answer)}
                 clickBack={onBack}
                 language={language}
                 disableNext={answer === undefined}

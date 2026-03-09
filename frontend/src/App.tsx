@@ -35,17 +35,21 @@ export default function App() {
 
     /* Diabetes survey states */
     const [relativeWithDiabetes, setRelativeWithDiabetes] = useState<
-        boolean | null | undefined
-    >(undefined);
+        boolean | "unknown" | "unavailable"
+    >("unavailable");
     const [hypertensionHistory, setHypertensionHistory] = useState<
-        boolean | null | undefined
-    >(undefined);
+        boolean | "unknown" | "unavailable"
+    >("unavailable");
     const [physicallyActive, setPhysicallyActive] = useState<
-        boolean | null | undefined
-    >(undefined);
+        boolean | "unknown" | "unavailable"
+    >("unavailable");
     const [diabetesRiskScore, setDiabetesRiskScore] = useState<number | null>(
         null,
     );
+    const [diabetesRisk, setDiabetesRisk] = useState<string | null>(null);
+    const [diabetesRiskPossible, setDiabetesRiskPossible] = useState<
+        number | null
+    >(null);
 
     const {
         step,
@@ -62,20 +66,20 @@ export default function App() {
         heightCm,
         weightKg,
         relativeWithDiabetes,
+        hypertensionHistory,
+        physicallyActive,
     });
 
     const handleDiabetesCalculation = async () => {
-        const { score, risk } = await submitDiabetesSurvey({
-            age,
-            gender: sex,
+        const { score, risk, possible } = await submitDiabetesSurvey({
             firstDegreeRelative: relativeWithDiabetes,
             hypertension: hypertensionHistory,
             physicallyActive: physicallyActive,
-            weight: weightKg,
-            height: heightCm,
         });
 
         setDiabetesRiskScore(score);
+        setDiabetesRisk(risk);
+        setDiabetesRiskPossible(possible);
     };
 
     return (
@@ -249,7 +253,6 @@ export default function App() {
                         onNext={() => {
                             handleDiabetesCalculation();
                             goNext();
-                            console.log(diabetesRiskScore);
                         }}
                         onBack={goBack}
                         onSkip={goSkip}
@@ -261,6 +264,8 @@ export default function App() {
                     <DiabetesResults
                         language={language}
                         score={diabetesRiskScore}
+                        risk={diabetesRisk}
+                        possible={diabetesRiskPossible}
                         onBack={goBack}
                         onNext={goNext}
                     />

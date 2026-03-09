@@ -22,7 +22,6 @@ def listen_to_stadiometer():
         if decoded:
             try:
                 height_cm = int(round(float(decoded)))
-                print(height_cm)
 
                 # Update patient state
                 patient_state["height_cm"] = height_cm
