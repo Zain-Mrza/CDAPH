@@ -1,5 +1,6 @@
 import NavigationActions from "../../components/NavigationActions";
 import Screen from "../../components/Screen";
+import { loadLanguage } from "../../i18n";
 
 type Props = {
     onNext?: () => void;
@@ -14,21 +15,17 @@ export default function DiabetesSurveyIntro({
     onBack,
     language,
 }: Props) {
+    const t = loadLanguage(language);
+    const text = t.diabetesSurvey.intro;
+
     return (
-        <Screen title="Diabetes Risk Survey" onSkip={onSkip}>
-            <p className="instructionText">
-                We will now ask three questions to help assess your risk for
-                diabetes.
-            </p>
+        <Screen title={text.title} onSkip={onSkip} skipLabel={text.skipLabel}>
+            <p className="instructionText">{text.description}</p>
 
             <div className="infoBox">
                 <ul>
-                    <li className="instructionBullet">
-                        This survey takes about 1 minute.
-                    </li>
-                    <li className="instructionBullet">
-                        You may skip the survey at any time.
-                    </li>
+                    <li className="instructionBullet">{text.bullet1}</li>
+                    <li className="instructionBullet">{text.bullet2}</li>
                 </ul>
             </div>
 

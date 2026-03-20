@@ -4,6 +4,7 @@ type Props = {
     question: string;
     questionNumber: number;
     maxQuestionNumber: number;
+    questionCounterLabel?: string;
     subtitle?: string;
     children: ReactNode;
     ariaLabel?: string;
@@ -16,6 +17,7 @@ export default function SurveyQuestion({
     question,
     questionNumber,
     maxQuestionNumber,
+    questionCounterLabel,
     subtitle,
     children,
     ariaLabel,
@@ -30,7 +32,8 @@ export default function SurveyQuestion({
         >
             <div className="survey-header">
                 <h1 className="surveyHeaderQuestionNumber">
-                    Question {questionNumber} of {maxQuestionNumber}
+                    {questionCounterLabel ??
+                        `Question ${questionNumber} of ${maxQuestionNumber}`}
                 </h1>
 
                 {onSkip && (

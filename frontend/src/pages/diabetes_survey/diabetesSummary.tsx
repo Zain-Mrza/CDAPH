@@ -1,5 +1,6 @@
 import NavigationActions from "../../components/NavigationActions";
 import Screen from "../../components/Screen";
+import { loadLanguage } from "../../i18n";
 
 type Props = {
     relativeWithDiabetes: boolean | "unknown" | "unavailable";
@@ -20,40 +21,36 @@ export default function DiabetesSurveyReview({
     onSkip,
     language,
 }: Props) {
+    const t = loadLanguage(language);
+    const text = t.diabetesSurvey.summary;
+
     const formatAnswer = (value: boolean | "unknown" | "unavailable") => {
-        if (value === "unavailable") return "Not answered";
-        if (value === "unknown") return "I don't know";
-        return value ? "Yes" : "No";
+        if (value === "unavailable") return text.notAnswered;
+        if (value === "unknown") return text.unknown;
+        return value ? text.yes : text.no;
     };
 
     return (
-        <Screen title="Review Your Responses" onSkip={onSkip}>
-            <p className="instructionText">
-                Please confirm that your answers below are correct before we
-                calculate your diabetes risk.
-            </p>
+        <Screen title={text.title} onSkip={onSkip} skipLabel={text.skipLabel}>
+            <p className="instructionText">{text.instruction}</p>
 
             <div className="summaryList">
                 <div className="summaryRow">
-                    <span className="summaryLabel">
-                        Parent, sibling, or child with diabetes
-                    </span>
+                    <span className="summaryLabel">{text.relativeLabel}</span>
                     <span className="summaryValue">
                         {formatAnswer(relativeWithDiabetes)}
                     </span>
                 </div>
 
                 <div className="summaryRow">
-                    <span className="summaryLabel">
-                        History of hypertension
-                    </span>
+                    <span className="summaryLabel">{text.hypertensionLabel}</span>
                     <span className="summaryValue">
                         {formatAnswer(hypertensionHistory)}
                     </span>
                 </div>
 
                 <div className="summaryRow">
-                    <span className="summaryLabel">Physically active</span>
+                    <span className="summaryLabel">{text.physicallyActiveLabel}</span>
                     <span className="summaryValue">
                         {formatAnswer(physicallyActive)}
                     </span>

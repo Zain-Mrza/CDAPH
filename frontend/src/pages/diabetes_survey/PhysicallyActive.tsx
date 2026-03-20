@@ -1,6 +1,7 @@
 import { useState } from "react";
 import NavigationActions from "../../components/NavigationActions";
 import SurveyQuestion from "../../components/SurveyQuestion";
+import { loadLanguage } from "../../i18n";
 
 type Answer = boolean | "unknown" | "unavailable" | undefined;
 
@@ -20,21 +21,25 @@ export default function PhysicallyActiveQuestion({
     initialValue,
 }: Props) {
     const [answer, setAnswer] = useState<Answer>(initialValue);
+    const t = loadLanguage(language);
+    const text = t.diabetesSurvey.questions;
 
     return (
         <SurveyQuestion
-            question="Are you physically active?"
+            question={text.physicallyActive}
             questionNumber={3}
             maxQuestionNumber={3}
             onSkip={onSkip}
+            skipLabel={text.skipLabel}
+            questionCounterLabel={text.questionCounter(3, 3)}
         >
             <fieldset className="surveyFieldset">
-                <legend className="srOnly">Are you physically active?</legend>
+                <legend className="srOnly">{text.physicallyActive}</legend>
 
                 <div
                     className="surveyMultipleChoice"
                     role="radiogroup"
-                    aria-label="Are you physically active?"
+                    aria-label={text.physicallyActive}
                 >
                     <label
                         className={`surveyButton ${answer === true ? "selected" : ""}`}
@@ -46,7 +51,7 @@ export default function PhysicallyActiveQuestion({
                             checked={answer === true}
                             onChange={() => setAnswer(true)}
                         />
-                        <span>Yes</span>
+                        <span>{text.yes}</span>
                     </label>
 
                     <label
@@ -59,7 +64,7 @@ export default function PhysicallyActiveQuestion({
                             checked={answer === false}
                             onChange={() => setAnswer(false)}
                         />
-                        <span>No</span>
+                        <span>{text.no}</span>
                     </label>
 
                     <label
@@ -72,7 +77,7 @@ export default function PhysicallyActiveQuestion({
                             checked={answer === "unknown"}
                             onChange={() => setAnswer("unknown")}
                         />
-                        <span>I don't know</span>
+                        <span>{text.unknown}</span>
                     </label>
                 </div>
             </fieldset>

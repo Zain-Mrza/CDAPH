@@ -66,3 +66,51 @@ export interface InstructionTypes {
         instruction: string;
     };
 }
+
+export interface DiabetesSurveyTypes {
+    intro: {
+        title: string;
+        description: string;
+        bullet1: string;
+        bullet2: string;
+        skipLabel: string;
+    };
+
+    questions: {
+        yes: string;
+        no: string;
+        unknown: string;
+        skipLabel: string;
+        questionCounter: (current: number, total: number) => string;
+        relative: string;
+        hypertension: string;
+        physicallyActive: string;
+    };
+
+    summary: {
+        title: string;
+        instruction: string;
+        relativeLabel: string;
+        hypertensionLabel: string;
+        physicallyActiveLabel: string;
+        yes: string;
+        no: string;
+        unknown: string;
+        notAnswered: string;
+        skipLabel: string;
+    };
+
+    results: {
+        title: string;
+        unavailable: string;
+        conditionName: string;
+        highRiskIntro: string;
+        highRiskBullet1: string;
+        highRiskBullet2: string;
+        highRiskBullet3: string;
+        lowRiskIntro: string;
+        lowRiskBullet1: string;
+        lowRiskBullet2: string;
+        lowRiskBullet3: string;
+    };
+}

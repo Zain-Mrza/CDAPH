@@ -1,5 +1,6 @@
 import NavigationActions from "../../components/NavigationActions";
 import RiskSlider from "../../components/RiskSlider";
+import { loadLanguage } from "../../i18n";
 
 type Props = {
     score: number | null;
@@ -20,15 +21,16 @@ export default function DiabetesResults({
     onBack,
     onNext,
 }: Props) {
+    const t = loadLanguage(language);
+    const text = t.diabetesSurvey.results;
+
     if (score === null) {
         return (
             <div className="kioskCard">
-                <h1 className="title">Diabetes Risk Results</h1>
+                <h1 className="title">{text.title}</h1>
 
                 <div className="resultsContainer">
-                    <p className="resultExplanation">
-                        Unable to display your result at this time.
-                    </p>
+                    <p className="resultExplanation">{text.unavailable}</p>
                 </div>
 
                 <NavigationActions clickNext={onFinish} language={language} />
@@ -41,58 +43,35 @@ export default function DiabetesResults({
 
     return (
         <div className="kioskCard">
-            <h1 className="title">Diabetes Risk Results</h1>
+            <h1 className="title">{text.title}</h1>
 
             <div className="resultsContainer">
                 <RiskSlider
                     score={score}
                     risk={risk}
                     possible={possible}
-                    conditionName="Diabetes"
+                    conditionName={text.conditionName}
                 />
 
                 <div className="resultExplanation">
                     {isHighRisk || isBorderline ? (
                         <>
-                            <p>
-                                Your answers suggest that you may be at an
-                                increased risk for developing type 2 diabetes.
-                            </p>
+                            <p>{text.highRiskIntro}</p>
 
                             <ul>
-                                <li>
-                                    Consider confirmatory testing such as
-                                    fasting glucose or HbA1c.
-                                </li>
-                                <li>
-                                    Lifestyle changes like improved diet and
-                                    regular physical activity can reduce risk.
-                                </li>
-                                <li>
-                                    You may benefit from a diabetes prevention
-                                    program or nutrition counseling.
-                                </li>
+                                <li>{text.highRiskBullet1}</li>
+                                <li>{text.highRiskBullet2}</li>
+                                <li>{text.highRiskBullet3}</li>
                             </ul>
                         </>
                     ) : (
                         <>
-                            <p>
-                                Your answers suggest a lower risk for developing
-                                type 2 diabetes.
-                            </p>
+                            <p>{text.lowRiskIntro}</p>
 
                             <ul>
-                                <li>
-                                    Continue maintaining a healthy lifestyle.
-                                </li>
-                                <li>
-                                    Regular physical activity and balanced diet
-                                    help reduce diabetes risk.
-                                </li>
-                                <li>
-                                    Consider periodic screening as recommended
-                                    by your healthcare provider.
-                                </li>
+                                <li>{text.lowRiskBullet1}</li>
+                                <li>{text.lowRiskBullet2}</li>
+                                <li>{text.lowRiskBullet3}</li>
                             </ul>
                         </>
                     )}
