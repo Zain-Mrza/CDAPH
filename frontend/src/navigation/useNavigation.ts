@@ -1,40 +1,39 @@
 import { useState } from "react";
-import { steps, stepFlow, type Step, type AppState } from "./steps";
+import { skipTargets, steps } from "./steps";
 
-function resolveTarget(
-    target: Step | ((state: AppState) => Step) | undefined,
-    state: AppState,
-): Step | undefined {
-    if (target === undefined) return undefined;
-    return typeof target === "function" ? target(state) : target;
-}
+export function useNavigation() {
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-export function useNavigation(state: AppState) {
-    const [step, setStep] = useState<Step>("start");
+    const step = steps[currentStepIndex];
 
-    const config = stepFlow[step];
+    const moveBy = (offset: number) => {
+        setCurrentStepIndex((index) => {
+            const nextIndex = index + offset;
 
-    const goNext = () => {
-        const target = resolveTarget(config.next, state);
-        if (target) setStep(target);
+            if (nextIndex < 0 || nextIndex >= steps.length) {
+                return index;
+            }
+
+            return nextIndex;
+        });
     };
 
-    const goBack = () => {
-        const target = resolveTarget(config.back, state);
-        if (target) setStep(target);
-    };
-
+    const goNext = () => moveBy(1);
+    const goBack = () => moveBy(-1);
     const goSkip = () => {
-        const target = resolveTarget(config.skip, state);
-        if (target) setStep(target);
+        const target = skipTargets[step];
+
+        if (!target) {
+            return;
+        }
+
+        setCurrentStepIndex(steps.indexOf(target));
     };
 
-    const hasSkip = config.skip !== undefined;
-
-    const currentStepIndex = steps.indexOf(step);
     const currentStepNumber = currentStepIndex + 1;
     const totalSteps = steps.length;
-    const showProgress = step !== "start";
+    const showProgress = currentStepIndex > 0;
+    const hasSkip = step in skipTargets;
 
     return {
         step,

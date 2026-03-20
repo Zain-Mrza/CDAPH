@@ -55,20 +55,11 @@ export default function App() {
         step,
         goNext,
         goBack,
-        goSkip,
         showProgress,
         currentStepNumber,
         totalSteps,
-    } = useNavigation({
-        age,
-        sex,
-        bloodPressure,
-        heightCm,
-        weightKg,
-        relativeWithDiabetes,
-        hypertensionHistory,
-        physicallyActive,
-    });
+        goSkip,
+    } = useNavigation();
 
     const handleDiabetesCalculation = async () => {
         const { score, risk, possible } = await submitDiabetesSurvey({
