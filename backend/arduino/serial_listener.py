@@ -1,12 +1,10 @@
 import serial
 from state import patient_state
 
-print("SERIAL state id:", id(patient_state))
-
 
 def listen_to_stadiometer():
 
-    ser = serial.Serial(port="COM3", baudrate=9600)
+    ser = serial.Serial(port="COM4", baudrate=9600)
 
     # Wait for Arduino ready
     while True:
@@ -18,7 +16,6 @@ def listen_to_stadiometer():
         raw = ser.readline()  # Recieve from Arduino
         decoded = raw.decode("utf-8").strip()
 
-        print(decoded)
         if decoded:
             try:
                 height_cm = int(round(float(decoded)))

@@ -85,7 +85,7 @@ export default function PhysicallyActiveQuestion({
                 }}
                 clickBack={onBack}
                 language={language}
-                disableNext={answer === undefined}
+                disableNext={answer === "unavailable"}
                 nextLabel="completeSurvey"
             />
         </SurveyQuestion>

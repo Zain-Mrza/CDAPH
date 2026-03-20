@@ -32,7 +32,7 @@ export default function RiskSlider({
 
         if (classification === "inconclusive") {
             return {
-                label: "Borderline",
+                label: "Medium Risk",
                 className: "inconclusive",
                 caption: `Your score falls at the border between the lower-risk and higher-risk ranges for ${conditionName.toLowerCase()}.`,
             };

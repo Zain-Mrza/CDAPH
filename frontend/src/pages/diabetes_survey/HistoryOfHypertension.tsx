@@ -83,7 +83,7 @@ export default function HypertensionQuestion({
                 }}
                 clickBack={onBack}
                 language={language}
-                disableNext={answer === undefined}
+                disableNext={answer === "unavailable"}
             />
         </SurveyQuestion>
     );
