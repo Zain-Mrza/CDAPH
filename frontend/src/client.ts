@@ -1,5 +1,4 @@
 export interface SubmitResponse {
-    // defines what shape SubmitResponse should be
     status: string;
 }
 
@@ -17,28 +16,61 @@ export async function healthCheck() {
     return res.json();
 }
 
-/**
- * Function to submit all measurements to api/measurement endpoint (backend)
- *
- * @param type - MeasurementType. Must be strings as seen above.
- * @param value - Value sent to backend. For example, you send 55 for weight in kg.
- * @returns - JSON response confirming status that the "type" measurement was stored for confirmation.
- */
+async function readErrorMessage(response: Response, fallback: string) {
+    try {
+        const body = await response.json();
+        if (typeof body?.error === "string") {
+            return body.error;
+        }
+    } catch {
+        // Leave the fallback message in place when the response is not JSON.
+    }
+
+    return fallback;
+}
 
 export const submitMeasurements = async (
     measurement: MeasurementType,
     value: string | number,
 ): Promise<SubmitResponse> => {
-    const res = await fetch("api/measurement", {
+    const res = await fetch("/api/measurement", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ measurement, value }),
     });
 
+    if (!res.ok) {
+        throw new Error(await readErrorMessage(res, "Failed to save measurement"));
+    }
+
     return res.json();
 };
 
-/* Submit diabetes survey data */
+export async function resetBackendState() {
+    const response = await fetch("/api/reset", {
+        method: "POST",
+        keepalive: true,
+    });
+
+    if (!response.ok) {
+        throw new Error(
+            await readErrorMessage(response, "Failed to reset backend state"),
+        );
+    }
+}
+
+export function resetBackendStateOnPageExit() {
+    if (typeof navigator.sendBeacon === "function") {
+        navigator.sendBeacon("/api/reset");
+        return;
+    }
+
+    void fetch("/api/reset", {
+        method: "POST",
+        keepalive: true,
+    });
+}
+
 export interface DiabetesSurveyPayload {
     firstDegreeRelative: boolean | "unknown" | "unavailable";
     hypertension: boolean | "unknown" | "unavailable";
@@ -69,12 +101,15 @@ export const submitDiabetesSurvey = async (
     return await response.json();
 };
 
-/* Getting results */ // Idk I need to delete this eventually
 export const getResults = async () => {
     const res = await fetch("/api/risk", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
     });
+
+    if (!res.ok) {
+        throw new Error(await readErrorMessage(res, "Failed to load results"));
+    }
 
     return res.json();
 };

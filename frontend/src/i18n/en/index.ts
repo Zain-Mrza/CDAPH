@@ -4,3 +4,4 @@ export { BLOOD_PRESSURE_MESSAGES as bloodPressureResults } from "./bloodPressure
 export { SummaryTranslations as summary } from "./summary";
 export { NavigationText } from "./navigationActions";
 export { DiabetesSurveyText as diabetesSurvey } from "./diabetesSurvey";
+export { RiskSliderText as riskSlider } from "./riskSlider";

@@ -15,6 +15,7 @@ export interface MeasurementInputTypes {
         error2: string;
         error3: string;
         error4: string;
+        saveError: string;
     };
 
     bp: {
@@ -26,6 +27,9 @@ export interface MeasurementInputTypes {
         helper2: string;
         error1: string;
         error2: string;
+        error3: string;
+        error4: string;
+        saveError: string;
     };
 
     height: {
@@ -113,4 +117,20 @@ export interface DiabetesSurveyTypes {
         lowRiskBullet2: string;
         lowRiskBullet3: string;
     };
+}
+
+export interface RiskSliderTypes {
+    ariaLabel: (score: number, riskLabel: string) => string;
+    resultEyebrow: (conditionName: string) => string;
+    highRiskLabel: string;
+    mediumRiskLabel: string;
+    lowRiskLabel: string;
+    highRiskCaption: (conditionName: string) => string;
+    mediumRiskCaption: (conditionName: string) => string;
+    lowRiskCaption: (conditionName: string) => string;
+    scaleAriaLabel: (score: number, possible: number | null) => string;
+    rangeLabel: string;
+    scoreLabel: string;
+    lowerRiskRangeLabel: string;
+    higherRiskRangeLabel: string;
 }

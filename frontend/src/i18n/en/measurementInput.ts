@@ -11,10 +11,11 @@ export const InputInstructions: MeasurementInputTypes = {
         helper3: "Intersex",
         helper4: "Prefer not to say",
         helper5: "years",
-        error1: "Please enter a number.",
+        error1: "Please enter a whole number.",
         error2: "You must be 18 years old or older.",
         error3: "Age must be at most 120.",
         error4: "Please select an option.",
+        saveError: "We couldn't save this measurement. Please try again.",
     },
 
     bp: {
@@ -25,8 +26,11 @@ export const InputInstructions: MeasurementInputTypes = {
         label2: "Diastolic",
         helper1: "Top number",
         helper2: "Bottom number",
-        error1: "Please enter both numbers.",
+        error1: "Please enter whole numbers for both values.",
         error2: "Systolic must be higher than diastolic.",
+        error3: "Systolic must be between 70 and 250.",
+        error4: "Diastolic must be between 40 and 150.",
+        saveError: "We couldn't save this measurement. Please try again.",
     },
 
     height: {

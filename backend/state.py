@@ -1,5 +1,6 @@
 patient_state = {
     "age": None,
+    "sex": None,
     "blood_pressure": None,
     "height_cm": None,
     "weight_kg": None,

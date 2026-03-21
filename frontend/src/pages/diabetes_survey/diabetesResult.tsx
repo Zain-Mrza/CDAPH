@@ -50,6 +50,7 @@ export default function DiabetesResults({
                     score={score}
                     risk={risk}
                     possible={possible}
+                    language={language}
                     conditionName={text.conditionName}
                 />
 

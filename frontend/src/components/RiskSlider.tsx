@@ -1,7 +1,10 @@
+import { loadLanguage } from "../i18n";
+
 type Props = {
     score: number | null;
     risk: string | null;
     possible: number | null;
+    language: "en" | "es";
     conditionName?: string;
 };
 
@@ -9,8 +12,11 @@ export default function RiskSlider({
     score,
     risk,
     possible = null,
+    language,
     conditionName = "Diabetes",
 }: Props) {
+    const t = loadLanguage(language);
+    const text = t.riskSlider;
     const clampedScore = Math.max(0, Math.min(10, score ?? 0));
     const percent = (clampedScore / 10) * 100;
 
@@ -24,24 +30,24 @@ export default function RiskSlider({
     const getRiskStatus = (classification: typeof risk) => {
         if (classification === "high") {
             return {
-                label: "Higher Risk",
+                label: text.highRiskLabel,
                 className: "high",
-                caption: `Your score falls in the higher-risk range for ${conditionName.toLowerCase()}.`,
+                caption: text.highRiskCaption(conditionName),
             };
         }
 
         if (classification === "inconclusive") {
             return {
-                label: "Medium Risk",
+                label: text.mediumRiskLabel,
                 className: "inconclusive",
-                caption: `Your score falls at the border between the lower-risk and higher-risk ranges for ${conditionName.toLowerCase()}.`,
+                caption: text.mediumRiskCaption(conditionName),
             };
         }
 
         return {
-            label: "Lower Risk",
+            label: text.lowRiskLabel,
             className: "low",
-            caption: `Your score falls in the lower-risk range for ${conditionName.toLowerCase()}.`,
+            caption: text.lowRiskCaption(conditionName),
         };
     };
 
@@ -50,12 +56,10 @@ export default function RiskSlider({
     return (
         <div
             className="riskDisplay"
-            aria-label={`${clampedScore} out of 10, ${patientRisk.label}`}
+            aria-label={text.ariaLabel(clampedScore, patientRisk.label)}
         >
             <div className="riskSummaryBlock">
-                <p className="riskSummaryEyebrow">
-                    Your {conditionName} Risk Result
-                </p>
+                <p className="riskSummaryEyebrow">{text.resultEyebrow(conditionName)}</p>
 
                 <div className={`riskSummaryBadge ${patientRisk.className}`}>
                     <span className="riskSummaryBadgeDot" aria-hidden="true" />
@@ -69,11 +73,7 @@ export default function RiskSlider({
                 <div
                     className="riskGradientBar"
                     role="img"
-                    aria-label={
-                        hasRange && clampedPossible !== null
-                            ? `Risk scale from 0 to 10. Your score is ${clampedScore}. The upper end of your range is ${clampedPossible}.`
-                            : `Risk scale from 0 to 10. Your score is ${clampedScore}.`
-                    }
+                    aria-label={text.scaleAriaLabel(clampedScore, clampedPossible)}
                 >
                     {hasRange && maximum !== null && (
                         <>
@@ -93,7 +93,7 @@ export default function RiskSlider({
                                 }}
                                 aria-hidden="true"
                             >
-                                Your range
+                                {text.rangeLabel}
                             </div>
                         </>
                     )}
@@ -118,7 +118,7 @@ export default function RiskSlider({
                             style={{ left: `${percent}%` }}
                             aria-hidden="true"
                         >
-                            Your Score
+                            {text.scoreLabel}
                         </div>
                     )}
                 </div>
@@ -129,8 +129,8 @@ export default function RiskSlider({
                 </div>
 
                 <div className="riskRangeLabels">
-                    <span>Lower Risk</span>
-                    <span>Higher Risk</span>
+                    <span>{text.lowerRiskRangeLabel}</span>
+                    <span>{text.higherRiskRangeLabel}</span>
                 </div>
             </div>
         </div>

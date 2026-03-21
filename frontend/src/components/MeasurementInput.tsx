@@ -1,4 +1,4 @@
-import { useId, useState, useEffect } from "react";
+import { useEffect, useId, useState } from "react";
 import { type MeasurementType, submitMeasurements } from "../client";
 import NavigationActions from "./NavigationActions";
 import Screen from "./Screen";
@@ -35,34 +35,35 @@ export default function MeasurementInput({
     initialValue,
     language,
 }: Props) {
-    const MeasurementInputText = {
+    const measurementInputText = {
         en: {
-            error: "Please enter a number.",
+            error: "Please enter a whole number.",
             minError: "Value must be at least",
             maxError: "Value must be at most",
+            saveError: "We couldn't save this measurement. Please try again.",
         },
         es: {
-            error: "Por favor, ingrese un número.",
+            error: "Por favor, ingrese un numero entero.",
             minError: "El valor debe ser al menos",
-            maxError: "El valor debe ser como máximo",
+            maxError: "El valor debe ser como maximo",
+            saveError: "No pudimos guardar esta medicion. Intentelo de nuevo.",
         },
     };
 
     const inputId = useId();
     const errorId = useId();
-
-    const text = MeasurementInputText[language];
+    const text = measurementInputText[language];
 
     const [value, setValue] = useState(() =>
         initialValue !== null && initialValue !== undefined
             ? initialValue.toString()
             : "",
     );
-
     const [touched, setTouched] = useState(false);
     const [userEdited, setUserEdited] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Sync Arduino measurement only if user hasn't typed yet
     useEffect(() => {
         if (userEdited) return;
         if (initialValue === null || initialValue === undefined) return;
@@ -75,27 +76,44 @@ export default function MeasurementInput({
         }
     }, [initialValue, userEdited, value]);
 
-    const n = Number(value);
-    const isNumber = value !== "" && !Number.isNaN(n);
+    const normalizedValue = value.trim();
+    const isWholeNumber =
+        normalizedValue !== "" && /^\d+$/.test(normalizedValue);
+    const parsedValue = isWholeNumber ? Number(normalizedValue) : Number.NaN;
 
-    let error: string | null = null;
+    let validationError: string | null = null;
 
-    if (touched) {
-        if (!isNumber) error = text.error;
-        else if (min !== undefined && n < min)
-            error = `${text.minError} ${min}.`;
-        else if (max !== undefined && n > max)
-            error = `${text.maxError} ${max}.`;
-    }
+    if (!isWholeNumber) validationError = text.error;
+    else if (min !== undefined && parsedValue < min)
+        validationError = `${text.minError} ${min}.`;
+    else if (max !== undefined && parsedValue > max)
+        validationError = `${text.maxError} ${max}.`;
 
-    const canContinue = isNumber && !error;
+    const shouldShowError = touched || userEdited;
+    const error = shouldShowError ? validationError : null;
+    const canContinue = isWholeNumber && !validationError;
 
-    function submit() {
+    async function submit() {
         setTouched(true);
 
-        if (canContinue) {
-            onSubmit(n);
-            submitMeasurements(measurement, n);
+        if (!canContinue || isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitError(null);
+
+        try {
+            await submitMeasurements(measurement, parsedValue);
+            onSubmit(parsedValue);
+        } catch (err) {
+            setSubmitError(
+                err instanceof Error && err.message
+                    ? err.message
+                    : text.saveError,
+            );
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -114,13 +132,16 @@ export default function MeasurementInput({
                         placeholder={placeholder}
                         onChange={(e) => {
                             setUserEdited(true);
+                            setSubmitError(null);
                             setValue(e.target.value);
                         }}
                         onBlur={() => setTouched(true)}
                         onKeyDown={(e) => {
-                            if (e.key === "Enter") submit();
+                            if (e.key === "Enter") {
+                                void submit();
+                            }
                         }}
-                        aria-invalid={Boolean(error)}
+                        aria-invalid={Boolean(error) || Boolean(submitError)}
                         aria-describedby={error ? errorId : undefined}
                     />
 
@@ -134,12 +155,20 @@ export default function MeasurementInput({
                         {error}
                     </div>
                 )}
+
+                {submitError && (
+                    <div className="error" role="alert">
+                        {submitError}
+                    </div>
+                )}
             </div>
 
             <NavigationActions
-                clickNext={submit}
+                clickNext={() => {
+                    void submit();
+                }}
                 clickBack={onBack}
-                disableNext={!canContinue}
+                disableNext={!canContinue || isSubmitting}
                 language={language}
             />
         </Screen>

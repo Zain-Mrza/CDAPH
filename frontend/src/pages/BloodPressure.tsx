@@ -4,13 +4,6 @@ import NavigationActions from "../components/NavigationActions";
 import Screen from "../components/Screen";
 import { loadLanguage } from "../i18n";
 
-/**
- * This file is a hacky solution to my inability to
- * generalize one input field. I need two fields for
- * blood pressure hence why I have to do it from the
- * bottom up in this file.
- */
-
 type Props = {
     onNext: (systolic: number, diastolic: number) => void;
     language: "en" | "es";
@@ -26,47 +19,79 @@ export default function BloodPressure({
     initialDiastolic,
     language,
 }: Props) {
+    const systolicRange = { min: 70, max: 250 };
+    const diastolicRange = { min: 40, max: 150 };
     const sysId = useId();
     const diaId = useId();
     const errId = useId();
 
     const [systolic, setSystolic] = useState(
         initialSystolic ? initialSystolic.toString() : "",
-    ); // Sets initial state to global if it exists (for back button)
+    );
     const [diastolic, setDiastolic] = useState(
         initialDiastolic ? initialDiastolic.toString() : "",
-    ); // Same here
+    );
     const [touched, setTouched] = useState(false);
+    const [systolicEdited, setSystolicEdited] = useState(false);
+    const [diastolicEdited, setDiastolicEdited] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const sys = Number(systolic);
-    const dia = Number(diastolic);
-
-    const isNum = (s: string, n: number) => s !== "" && !Number.isNaN(n);
+    const normalizedSystolic = systolic.trim();
+    const normalizedDiastolic = diastolic.trim();
+    const isWholeNumber = (value: string) =>
+        value !== "" && /^\d+$/.test(value);
+    const sys = isWholeNumber(normalizedSystolic)
+        ? Number(normalizedSystolic)
+        : Number.NaN;
+    const dia = isWholeNumber(normalizedDiastolic)
+        ? Number(normalizedDiastolic)
+        : Number.NaN;
+    const hasValidSystolic = !Number.isNaN(sys);
+    const hasValidDiastolic = !Number.isNaN(dia);
 
     const t = loadLanguage(language);
     const bpText = t.measurementInput.bp;
 
-    let error: string | null | undefined = null;
-    if (touched) {
-        if (!isNum(systolic, sys) || !isNum(diastolic, dia)) {
-            error = bpText.error1;
-        } else if (sys <= dia) {
-            error = bpText.error2;
-        }
+    let validationError: string | null | undefined = null;
+    if (!hasValidSystolic || !hasValidDiastolic) {
+        validationError = bpText.error1;
+    } else if (sys < systolicRange.min || sys > systolicRange.max) {
+        validationError = bpText.error3;
+    } else if (dia < diastolicRange.min || dia > diastolicRange.max) {
+        validationError = bpText.error4;
+    } else if (sys <= dia) {
+        validationError = bpText.error2;
     }
 
-    const canContinue = isNum(systolic, sys) && isNum(diastolic, dia) && !error;
+    const shouldShowError = touched || systolicEdited || diastolicEdited;
+    const error = shouldShowError ? validationError : null;
+    const canContinue =
+        hasValidSystolic && hasValidDiastolic && !validationError;
 
-    function submit() {
+    async function submit() {
         setTouched(true);
-        if (canContinue) {
+
+        if (!canContinue || isSubmitting) {
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitError(null);
+
+        try {
+            await submitMeasurements("bp", `${sys}/${dia}`);
             onNext(sys, dia);
-            submitMeasurements("bp", `${sys}/${dia}`);
+        } catch (err) {
+            setSubmitError(
+                err instanceof Error && err.message
+                    ? err.message
+                    : bpText.saveError,
+            );
+        } finally {
+            setIsSubmitting(false);
         }
     }
-
-    // Want to add picture with arrows pointing from systolic/diastolic number to their corresponding fields
-    // Recall every bit of text will later be pulled from a dictionary with translations
 
     return (
         <Screen title={bpText.title} subtitle={bpText.instruction}>
@@ -80,9 +105,13 @@ export default function BloodPressure({
                         inputMode="numeric"
                         value={systolic}
                         placeholder="e.g., 120"
-                        onChange={(e) => setSystolic(e.target.value)}
+                        onChange={(e) => {
+                            setSystolicEdited(true);
+                            setSubmitError(null);
+                            setSystolic(e.target.value);
+                        }}
                         onBlur={() => setTouched(true)}
-                        aria-invalid={Boolean(error)}
+                        aria-invalid={Boolean(error) || Boolean(submitError)}
                         aria-describedby={error ? errId : undefined}
                     />
                     <span className="unit">mmHg</span>
@@ -100,12 +129,18 @@ export default function BloodPressure({
                         inputMode="numeric"
                         value={diastolic}
                         placeholder="e.g., 80"
-                        onChange={(e) => setDiastolic(e.target.value)}
+                        onChange={(e) => {
+                            setDiastolicEdited(true);
+                            setSubmitError(null);
+                            setDiastolic(e.target.value);
+                        }}
                         onBlur={() => setTouched(true)}
                         onKeyDown={(e) => {
-                            if (e.key === "Enter") submit();
+                            if (e.key === "Enter") {
+                                void submit();
+                            }
                         }}
-                        aria-invalid={Boolean(error)}
+                        aria-invalid={Boolean(error) || Boolean(submitError)}
                         aria-describedby={error ? errId : undefined}
                     />
                     <span className="unit">mmHg</span>
@@ -119,9 +154,17 @@ export default function BloodPressure({
                 </div>
             )}
 
+            {submitError && (
+                <div className="error" role="alert">
+                    {submitError}
+                </div>
+            )}
+
             <NavigationActions
-                clickNext={submit}
-                disableNext={!canContinue}
+                clickNext={() => {
+                    void submit();
+                }}
+                disableNext={!canContinue || isSubmitting}
                 clickBack={onBack}
                 language={language}
             />
