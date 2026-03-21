@@ -73,6 +73,186 @@ export default function App() {
         setDiabetesRiskPossible(possible);
     };
 
+    const stepContent = (() => {
+        switch (step) {
+            case "start":
+                return <Start onNext={goNext} language={language} />;
+            case "ageSex":
+                return (
+                    <AgeSexInput
+                        initialAge={age ?? undefined}
+                        initialSex={sex ?? undefined}
+                        onNext={(age, sex) => {
+                            setAge(age);
+                            setSex(sex);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "bpInstructions":
+                return (
+                    <InstructionWithVideo
+                        videoSrc={stockVideo}
+                        videoAlt="How to place your arm in the blood pressure cuff"
+                        onContinue={goNext}
+                        onBack={goBack}
+                        language={language}
+                        instructionType="bpInstructions"
+                    />
+                );
+            case "bp":
+                return (
+                    <BloodPressure
+                        initialSystolic={bloodPressure?.systolic}
+                        initialDiastolic={bloodPressure?.diastolic}
+                        onNext={(systolic, diastolic) => {
+                            setBloodPressure({ systolic, diastolic });
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "heightInstructions":
+                return (
+                    <InstructionWithVideo
+                        videoSrc={stockVideo}
+                        videoAlt="How to use the stadiometer"
+                        onContinue={goNext}
+                        onBack={goBack}
+                        language={language}
+                        instructionType="heightInstructions"
+                    />
+                );
+            case "height":
+                return (
+                    <Height
+                        initialHeight={heightCm}
+                        onNext={(height) => {
+                            setHeightCm(height);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "weightInstructions":
+                return (
+                    <InstructionWithVideo
+                        videoSrc={stockVideo}
+                        videoAlt="How to use the weight scale"
+                        onContinue={goNext}
+                        onBack={goBack}
+                        language={language}
+                        instructionType="weightInstructions"
+                    />
+                );
+            case "weight":
+                return (
+                    <Weight
+                        initialWeight={weightKg}
+                        onNext={(weight) => {
+                            setWeightKg(weight);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "summary":
+                return (
+                    <SummaryStep
+                        age={age}
+                        sex={sex}
+                        bloodPressure={bloodPressure}
+                        heightCm={heightCm}
+                        weightKg={weightKg}
+                        onNext={goNext}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "diabetesIntro":
+                return (
+                    <DiabetesSurveyIntro
+                        onNext={goNext}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                    />
+                );
+            case "diabetesFirst":
+                return (
+                    <RelativeQuestion
+                        onNext={(hasRelative) => {
+                            setRelativeWithDiabetes(hasRelative);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                        initialValue={relativeWithDiabetes}
+                    />
+                );
+            case "diabetesSecond":
+                return (
+                    <HypertensionQuestion
+                        onNext={(answer) => {
+                            setHypertensionHistory(answer);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                        initialValue={hypertensionHistory}
+                    />
+                );
+            case "diabetesThird":
+                return (
+                    <PhysicallyActiveQuestion
+                        onNext={(answer) => {
+                            setPhysicallyActive(answer);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                        initialValue={physicallyActive}
+                    />
+                );
+            case "diabetesSummary":
+                return (
+                    <DiabetesSurveyReview
+                        relativeWithDiabetes={relativeWithDiabetes}
+                        hypertensionHistory={hypertensionHistory}
+                        physicallyActive={physicallyActive}
+                        onNext={() => {
+                            handleDiabetesCalculation();
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        onSkip={goSkip}
+                        language={language}
+                    />
+                );
+            case "diabetesResults":
+                return (
+                    <DiabetesResults
+                        language={language}
+                        score={diabetesRiskScore}
+                        risk={diabetesRisk}
+                        possible={diabetesRiskPossible}
+                        onBack={goBack}
+                        onNext={goNext}
+                    />
+                );
+            default:
+                return null;
+        }
+    })();
+
     return (
         <div className="kioskShell">
             <LanguageSelector
@@ -87,180 +267,7 @@ export default function App() {
                         totalSteps={totalSteps}
                     />
                 )}
-
-                {step === "start" && (
-                    <Start onNext={goNext} language={language} />
-                )}
-
-                {step === "ageSex" && (
-                    <AgeSexInput
-                        initialAge={age ?? undefined}
-                        initialSex={sex ?? undefined}
-                        onNext={(age, sex) => {
-                            setAge(age);
-                            setSex(sex);
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        language={language}
-                    />
-                )}
-
-                {step === "bpInstructions" && (
-                    <InstructionWithVideo
-                        videoSrc={stockVideo}
-                        videoAlt="How to place your arm in the blood pressure cuff"
-                        onContinue={goNext}
-                        onBack={goBack}
-                        language={language}
-                        instructionType="bpInstructions"
-                    />
-                )}
-
-                {step === "bp" && (
-                    <BloodPressure
-                        initialSystolic={bloodPressure?.systolic}
-                        initialDiastolic={bloodPressure?.diastolic}
-                        onNext={(systolic, diastolic) => {
-                            setBloodPressure({ systolic, diastolic });
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        language={language}
-                    />
-                )}
-
-                {step === "heightInstructions" && (
-                    <InstructionWithVideo
-                        videoSrc={stockVideo}
-                        videoAlt="How to use the stadiometer"
-                        onContinue={goNext}
-                        onBack={goBack}
-                        language={language}
-                        instructionType="heightInstructions"
-                    />
-                )}
-
-                {step === "height" && (
-                    <Height
-                        initialHeight={heightCm}
-                        onNext={(height) => {
-                            setHeightCm(height);
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        language={language}
-                    />
-                )}
-
-                {step === "weightInstructions" && (
-                    <InstructionWithVideo
-                        videoSrc={stockVideo}
-                        videoAlt="How to use the weight scale"
-                        onContinue={goNext}
-                        onBack={goBack}
-                        language={language}
-                        instructionType="weightInstructions"
-                    />
-                )}
-
-                {step === "weight" && (
-                    <Weight
-                        initialWeight={weightKg}
-                        onNext={(weight) => {
-                            setWeightKg(weight);
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        language={language}
-                    />
-                )}
-
-                {step === "summary" && (
-                    <SummaryStep
-                        age={age}
-                        sex={sex}
-                        bloodPressure={bloodPressure}
-                        heightCm={heightCm}
-                        weightKg={weightKg}
-                        onNext={goNext}
-                        onBack={goBack}
-                        language={language}
-                    />
-                )}
-
-                {step === "diabetesIntro" && (
-                    <DiabetesSurveyIntro
-                        onNext={goNext}
-                        onBack={goBack}
-                        onSkip={goSkip}
-                        language={language}
-                    />
-                )}
-
-                {step === "diabetesFirst" && (
-                    <RelativeQuestion
-                        onNext={(hasRelative) => {
-                            setRelativeWithDiabetes(hasRelative);
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        onSkip={goSkip}
-                        language={language}
-                        initialValue={relativeWithDiabetes}
-                    />
-                )}
-
-                {step === "diabetesSecond" && (
-                    <HypertensionQuestion
-                        onNext={(answer) => {
-                            setHypertensionHistory(answer);
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        onSkip={goSkip}
-                        language={language}
-                        initialValue={hypertensionHistory}
-                    />
-                )}
-                {step === "diabetesThird" && (
-                    <PhysicallyActiveQuestion
-                        onNext={(answer) => {
-                            setPhysicallyActive(answer);
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        onSkip={goSkip}
-                        language={language}
-                        initialValue={physicallyActive}
-                    />
-                )}
-
-                {step === "diabetesSummary" && (
-                    <DiabetesSurveyReview
-                        relativeWithDiabetes={relativeWithDiabetes}
-                        hypertensionHistory={hypertensionHistory}
-                        physicallyActive={physicallyActive}
-                        onNext={() => {
-                            handleDiabetesCalculation();
-                            goNext();
-                        }}
-                        onBack={goBack}
-                        onSkip={goSkip}
-                        language={language}
-                    />
-                )}
-
-                {step === "diabetesResults" && (
-                    <DiabetesResults
-                        language={language}
-                        score={diabetesRiskScore}
-                        risk={diabetesRisk}
-                        possible={diabetesRiskPossible}
-                        onBack={goBack}
-                        onNext={goNext}
-                    />
-                )}
+                {stepContent}
             </div>
         </div>
     );
