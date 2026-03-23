@@ -87,3 +87,33 @@ def calculate_diabetes_risk(
         "risk": risk_level,
         "possible": high_end,
     }
+
+
+def calculate_mini_eat_score(answers):
+    if len(answers) == 0:
+        raise ValueError("answers must not be empty")
+
+    # Refined grains, high-fat dairy, and sweets are reverse scored.
+    reverse_scored_indexes = {5, 7, 8}
+    raw_score = 0
+
+    for index, answer in enumerate(answers):
+        normalized = 8 - answer if index in reverse_scored_indexes else answer
+        raw_score += normalized
+
+    max_raw_score = len(answers) * 8
+    max_score = len(answers) * 10
+    score = int(round((raw_score / max_raw_score) * max_score))
+
+    if score < 61:
+        classification = "unhealthy"
+    elif score <= 69:
+        classification = "intermediate"
+    else:
+        classification = "healthy"
+
+    return {
+        "score": score,
+        "classification": classification,
+        "maxScore": max_score,
+    }

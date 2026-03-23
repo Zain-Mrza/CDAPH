@@ -1,11 +1,32 @@
 import { loadLanguage } from "../i18n";
 
+type StatusConfig = {
+    label: string;
+    className: "low" | "high" | "inconclusive";
+    caption: string;
+};
+
+type ThresholdMarker = {
+    value: number;
+    label: string;
+};
+
 type Props = {
     score: number | null;
     risk: string | null;
     possible: number | null;
     language: "en" | "es";
     conditionName?: string;
+    minScore?: number;
+    maxScore?: number;
+    higherIsBetter?: boolean;
+    eyebrow?: string;
+    lowerRangeLabel?: string;
+    higherRangeLabel?: string;
+    ariaLabel?: string;
+    scaleAriaLabel?: string;
+    thresholdMarkers?: ThresholdMarker[];
+    statusMap?: Record<string, StatusConfig>;
 };
 
 export default function RiskSlider({
@@ -14,52 +35,88 @@ export default function RiskSlider({
     possible = null,
     language,
     conditionName = "Diabetes",
+    minScore = 0,
+    maxScore = 10,
+    higherIsBetter = false,
+    eyebrow,
+    lowerRangeLabel,
+    higherRangeLabel,
+    ariaLabel,
+    scaleAriaLabel,
+    thresholdMarkers = [],
+    statusMap,
 }: Props) {
     const t = loadLanguage(language);
     const text = t.riskSlider;
-    const clampedScore = Math.max(0, Math.min(10, score ?? 0));
-    const percent = (clampedScore / 10) * 100;
+    const scoreRange = Math.max(1, maxScore - minScore);
+    const clampToScale = (value: number) =>
+        Math.max(minScore, Math.min(maxScore, value));
+    const clampedScore = clampToScale(score ?? minScore);
+    const percent = ((clampedScore - minScore) / scoreRange) * 100;
 
     const clampedPossible =
-        possible !== null ? Math.max(0, Math.min(10, possible)) : null;
+        possible !== null ? clampToScale(possible) : null;
     const maximum =
-        clampedPossible !== null ? (clampedPossible / 10) * 100 : null;
+        clampedPossible !== null
+            ? ((clampedPossible - minScore) / scoreRange) * 100
+            : null;
 
     const hasRange = clampedPossible !== null && clampedPossible > clampedScore;
 
-    const getRiskStatus = (classification: typeof risk) => {
-        if (classification === "high") {
-            return {
-                label: text.highRiskLabel,
-                className: "high",
-                caption: text.highRiskCaption(conditionName),
-            };
-        }
-
-        if (classification === "inconclusive") {
-            return {
-                label: text.mediumRiskLabel,
-                className: "inconclusive",
-                caption: text.mediumRiskCaption(conditionName),
-            };
-        }
-
-        return {
+    const defaultStatusMap: Record<string, StatusConfig> = {
+        high: {
+            label: text.highRiskLabel,
+            className: "high",
+            caption: text.highRiskCaption(conditionName),
+        },
+        inconclusive: {
+            label: text.mediumRiskLabel,
+            className: "inconclusive",
+            caption: text.mediumRiskCaption(conditionName),
+        },
+        low: {
             label: text.lowRiskLabel,
             className: "low",
             caption: text.lowRiskCaption(conditionName),
-        };
+        },
+    };
+
+    const getRiskStatus = (classification: typeof risk) => {
+        if (classification && statusMap?.[classification]) {
+            return statusMap[classification];
+        }
+
+        if (classification === "high") {
+            return defaultStatusMap.high;
+        }
+
+        if (classification === "inconclusive") {
+            return defaultStatusMap.inconclusive;
+        }
+
+        if (classification === "low") {
+            return defaultStatusMap.low;
+        }
+
+        return defaultStatusMap.low;
     };
 
     const patientRisk = getRiskStatus(risk);
+    const gradientBackground = higherIsBetter
+        ? "linear-gradient(90deg, #e74c3c 0%, #f1c40f 50%, #2ecc71 100%)"
+        : "linear-gradient(90deg, #2ecc71 0%, #f1c40f 50%, #e74c3c 100%)";
 
     return (
         <div
             className="riskDisplay"
-            aria-label={text.ariaLabel(clampedScore, patientRisk.label)}
+            aria-label={
+                ariaLabel ?? text.ariaLabel(clampedScore, patientRisk.label, maxScore)
+            }
         >
             <div className="riskSummaryBlock">
-                <p className="riskSummaryEyebrow">{text.resultEyebrow(conditionName)}</p>
+                <p className="riskSummaryEyebrow">
+                    {eyebrow ?? text.resultEyebrow(conditionName)}
+                </p>
 
                 <div className={`riskSummaryBadge ${patientRisk.className}`}>
                     <span className="riskSummaryBadgeDot" aria-hidden="true" />
@@ -73,8 +130,41 @@ export default function RiskSlider({
                 <div
                     className="riskGradientBar"
                     role="img"
-                    aria-label={text.scaleAriaLabel(clampedScore, clampedPossible)}
+                    aria-label={
+                        scaleAriaLabel ??
+                        text.scaleAriaLabel(
+                            clampedScore,
+                            clampedPossible,
+                            minScore,
+                            maxScore,
+                        )
+                    }
+                    style={{ background: gradientBackground }}
                 >
+                    {thresholdMarkers.map((marker) => {
+                        const markerPercent =
+                            ((clampToScale(marker.value) - minScore) / scoreRange) *
+                            100;
+
+                        return (
+                            <div key={`${marker.value}-${marker.label}`}>
+                                <div
+                                    className="riskScaleMarker riskScaleMarkerThreshold"
+                                    style={{ left: `${markerPercent}%` }}
+                                    aria-hidden="true"
+                                />
+
+                                <div
+                                    className="riskScaleMarkerLabel riskScaleMarkerLabelThreshold"
+                                    style={{ left: `${markerPercent}%` }}
+                                    aria-hidden="true"
+                                >
+                                    {marker.label}
+                                </div>
+                            </div>
+                        );
+                    })}
+
                     {hasRange && maximum !== null && (
                         <>
                             <div
@@ -124,13 +214,13 @@ export default function RiskSlider({
                 </div>
 
                 <div className="riskAxisLabels">
-                    <span>0</span>
-                    <span>10</span>
+                    <span>{minScore}</span>
+                    <span>{maxScore}</span>
                 </div>
 
                 <div className="riskRangeLabels">
-                    <span>{text.lowerRiskRangeLabel}</span>
-                    <span>{text.higherRiskRangeLabel}</span>
+                    <span>{lowerRangeLabel ?? text.lowerRiskRangeLabel}</span>
+                    <span>{higherRangeLabel ?? text.higherRiskRangeLabel}</span>
                 </div>
             </div>
         </div>

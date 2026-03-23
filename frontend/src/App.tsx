@@ -1,6 +1,6 @@
 import { useState } from "react";
 import stockVideo from "./assets/stock.mp4";
-import { submitDiabetesSurvey } from "./client";
+import { submitDiabetesSurvey, submitMiniEatSurvey } from "./client";
 import InstructionWithVideo from "./components/InstructionWithVideo";
 import LanguageSelector from "./components/LanguageSelector";
 import ProgressBar from "./components/ProgressBar";
@@ -14,6 +14,10 @@ import HypertensionQuestion from "./pages/diabetes_survey/HistoryOfHypertension"
 import PhysicallyActiveQuestion from "./pages/diabetes_survey/PhysicallyActive";
 import RelativeQuestion from "./pages/diabetes_survey/Relative";
 import Height from "./pages/Height";
+import MiniEatIntro from "./pages/mini_eat/MiniEatIntro";
+import MiniEatQuestion from "./pages/mini_eat/MiniEatQuestion";
+import MiniEatResult from "./pages/mini_eat/MiniEatResult";
+import MiniEatSummary from "./pages/mini_eat/MiniEatSummary";
 import Start from "./pages/Start";
 import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
@@ -50,6 +54,14 @@ export default function App() {
     const [diabetesRiskPossible, setDiabetesRiskPossible] = useState<
         number | null
     >(null);
+    const [miniEatAnswers, setMiniEatAnswers] = useState<Array<number | null>>(
+        Array.from({ length: 9 }, () => null),
+    );
+    const [miniEatScore, setMiniEatScore] = useState<number | null>(null);
+    const [miniEatClassification, setMiniEatClassification] = useState<
+        "unhealthy" | "intermediate" | "healthy" | null
+    >(null);
+    const [miniEatMaxScore, setMiniEatMaxScore] = useState<number>(90);
 
     const {
         step,
@@ -72,6 +84,63 @@ export default function App() {
         setDiabetesRisk(risk);
         setDiabetesRiskPossible(possible);
     };
+
+    const updateMiniEatAnswer = (questionIndex: number, answer: number) => {
+        setMiniEatAnswers((currentAnswers) =>
+            currentAnswers.map((currentAnswer, index) =>
+                index === questionIndex ? answer : currentAnswer,
+            ),
+        );
+    };
+
+    const handleMiniEatCalculation = async () => {
+        if (miniEatAnswers.some((answer) => answer === null)) {
+            return;
+        }
+
+        const { score, classification, maxScore } = await submitMiniEatSurvey({
+            answers: miniEatAnswers as number[],
+        });
+
+        setMiniEatScore(score);
+        setMiniEatClassification(classification);
+        setMiniEatMaxScore(maxScore);
+    };
+
+    const miniEatStepMatch = step.match(/^miniEatQuestion(\d)$/);
+
+    if (miniEatStepMatch) {
+        const questionIndex = Number(miniEatStepMatch[1]) - 1;
+
+        return (
+            <div className="kioskShell">
+                <LanguageSelector
+                    currentLanguage={language}
+                    onLanguageChange={setLanguage}
+                />
+
+                <div className="kioskContent">
+                    {showProgress && (
+                        <ProgressBar
+                            currentStep={currentStepNumber}
+                            totalSteps={totalSteps}
+                        />
+                    )}
+
+                    <MiniEatQuestion
+                        questionIndex={questionIndex}
+                        initialValue={miniEatAnswers[questionIndex]}
+                        onNext={(answer) => {
+                            updateMiniEatAnswer(questionIndex, answer);
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        language={language}
+                    />
+                </div>
+            </div>
+        );
+    }
 
     const stepContent = (() => {
         switch (step) {
@@ -246,6 +315,36 @@ export default function App() {
                         possible={diabetesRiskPossible}
                         onBack={goBack}
                         onNext={goNext}
+                    />
+                );
+            case "miniEatIntro":
+                return (
+                    <MiniEatIntro
+                        onNext={goNext}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "miniEatSummary":
+                return (
+                    <MiniEatSummary
+                        answers={miniEatAnswers}
+                        onNext={() => {
+                            void handleMiniEatCalculation();
+                            goNext();
+                        }}
+                        onBack={goBack}
+                        language={language}
+                    />
+                );
+            case "miniEatResults":
+                return (
+                    <MiniEatResult
+                        score={miniEatScore}
+                        classification={miniEatClassification}
+                        maxScore={miniEatMaxScore}
+                        language={language}
+                        onBack={goBack}
                     />
                 );
             default:

@@ -83,6 +83,16 @@ interface DiabetesRiskResponse {
     possible: number | null;
 }
 
+export interface MiniEatSurveyPayload {
+    answers: number[];
+}
+
+interface MiniEatSurveyResponse {
+    score: number;
+    classification: "unhealthy" | "intermediate" | "healthy";
+    maxScore: number;
+}
+
 export const submitDiabetesSurvey = async (
     payload: DiabetesSurveyPayload,
 ): Promise<DiabetesRiskResponse> => {
@@ -96,6 +106,24 @@ export const submitDiabetesSurvey = async (
 
     if (!response.ok) {
         throw new Error("Failed to calculate diabetes risk");
+    }
+
+    return await response.json();
+};
+
+export const submitMiniEatSurvey = async (
+    payload: MiniEatSurveyPayload,
+): Promise<MiniEatSurveyResponse> => {
+    const response = await fetch("/api/mini-eat-risk", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to calculate Mini-EAT score");
     }
 
     return await response.json();

@@ -119,8 +119,68 @@ export interface DiabetesSurveyTypes {
     };
 }
 
+export interface MiniEatQuestionItem {
+    prompt: string;
+    summaryLabel: string;
+    examples: string[];
+    notes: string[];
+    servingSize: string;
+}
+
+export interface MiniEatSurveyTypes {
+    intro: {
+        title: string;
+        description: string;
+        bullet1: string;
+        bullet2: string;
+        skipLabel: string;
+    };
+
+    questions: {
+        skipLabel: string;
+        questionCounter: (current: number, total: number) => string;
+        examplesLabel: string;
+        servingSizeLabel: string;
+        options: string[];
+        items: MiniEatQuestionItem[];
+    };
+
+    summary: {
+        title: string;
+        instruction: string;
+        notAnswered: string;
+        skipLabel: string;
+    };
+
+    results: {
+        title: string;
+        unavailable: string;
+        eyebrow: string;
+        conditionName: string;
+        unhealthyLabel: string;
+        intermediateLabel: string;
+        healthyLabel: string;
+        unhealthyCaption: string;
+        intermediateCaption: string;
+        healthyCaption: string;
+        scaleAriaLabel: (score: number, maxScore: number) => string;
+        unhealthyIntro: string;
+        unhealthyBullet1: string;
+        unhealthyBullet2: string;
+        unhealthyBullet3: string;
+        intermediateIntro: string;
+        intermediateBullet1: string;
+        intermediateBullet2: string;
+        intermediateBullet3: string;
+        healthyIntro: string;
+        healthyBullet1: string;
+        healthyBullet2: string;
+        healthyBullet3: string;
+    };
+}
+
 export interface RiskSliderTypes {
-    ariaLabel: (score: number, riskLabel: string) => string;
+    ariaLabel: (score: number, riskLabel: string, maxScore: number) => string;
     resultEyebrow: (conditionName: string) => string;
     highRiskLabel: string;
     mediumRiskLabel: string;
@@ -128,7 +188,12 @@ export interface RiskSliderTypes {
     highRiskCaption: (conditionName: string) => string;
     mediumRiskCaption: (conditionName: string) => string;
     lowRiskCaption: (conditionName: string) => string;
-    scaleAriaLabel: (score: number, possible: number | null) => string;
+    scaleAriaLabel: (
+        score: number,
+        possible: number | null,
+        minScore: number,
+        maxScore: number,
+    ) => string;
     rangeLabel: string;
     scoreLabel: string;
     lowerRiskRangeLabel: string;

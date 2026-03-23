@@ -1,6 +1,11 @@
 import re
 
-from algorithms.algorithms import bp_risk, calculate_bmi, calculate_diabetes_risk
+from algorithms.algorithms import (
+    bp_risk,
+    calculate_bmi,
+    calculate_diabetes_risk,
+    calculate_mini_eat_score,
+)
 from flask import Blueprint, jsonify, request
 from state import patient_state
 
@@ -57,6 +62,23 @@ def parse_survey_answer(value, field_name):
         return value
 
     raise ValueError(f"{field_name} must be true, false, 'unknown', or 'unavailable'")
+
+
+def parse_mini_eat_answers(value):
+    if not isinstance(value, list):
+        raise ValueError("answers must be a list")
+
+    if len(value) != 9:
+        raise ValueError("answers must contain exactly 9 responses")
+
+    parsed_answers = []
+
+    for index, answer in enumerate(value, start=1):
+        parsed_answers.append(
+            parse_int_value(answer, f"answers[{index}]", min_value=0, max_value=8)
+        )
+
+    return parsed_answers
 
 
 @api.route("/measurement", methods=["POST"])
@@ -161,6 +183,22 @@ def diabetes_risk():
         physically_active=physically_active,
         bmi=calculate_bmi(patient_state["weight_kg"], patient_state["height_cm"]),
     )
+
+    return jsonify(result)
+
+
+@api.route("/mini-eat-risk", methods=["POST"])
+def mini_eat_risk():
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return error_response("invalid JSON body")
+
+    try:
+        answers = parse_mini_eat_answers(data.get("answers"))
+    except ValueError as exc:
+        return error_response(str(exc))
+
+    result = calculate_mini_eat_score(answers)
 
     return jsonify(result)
 
