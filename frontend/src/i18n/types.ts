@@ -199,3 +199,20 @@ export interface RiskSliderTypes {
     lowerRiskRangeLabel: string;
     higherRiskRangeLabel: string;
 }
+
+export interface ProgressBarTypes {
+    currentSection: string;
+    stepOf: (current: number, total: number) => string;
+    sectionStepOf: (current: number, total: number) => string;
+    completedLabel: string;
+    ariaValueText: (
+        sectionTitle: string,
+        currentStep: number,
+        totalSteps: number,
+    ) => string;
+    sections: {
+        measurements: string;
+        diabetes: string;
+        nutrition: string;
+    };
+}

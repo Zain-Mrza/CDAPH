@@ -21,7 +21,6 @@ import MiniEatSummary from "./pages/mini_eat/MiniEatSummary";
 import Start from "./pages/Start";
 import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
-import "./styles/progress-bar.module.css";
 
 export default function App() {
     /* Language state */
@@ -124,6 +123,8 @@ export default function App() {
                         <ProgressBar
                             currentStep={currentStepNumber}
                             totalSteps={totalSteps}
+                            currentStepId={step}
+                            language={language}
                         />
                     )}
 
@@ -364,6 +365,8 @@ export default function App() {
                     <ProgressBar
                         currentStep={currentStepNumber}
                         totalSteps={totalSteps}
+                        currentStepId={step}
+                        language={language}
                     />
                 )}
                 {stepContent}

@@ -6,3 +6,4 @@ export { NavigationText } from "./navigationActions";
 export { DiabetesSurveyText as diabetesSurvey } from "./diabetesSurvey";
 export { MiniEatSurveyText as miniEatSurvey } from "./miniEatSurvey";
 export { RiskSliderText as riskSlider } from "./riskSlider";
+export { ProgressBarText as progressBar } from "./progressBar";

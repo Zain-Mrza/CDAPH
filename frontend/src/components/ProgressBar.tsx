@@ -1,23 +1,31 @@
 import styles from "../styles/progress-bar.module.css";
+import { loadLanguage } from "../i18n";
+import { progressSections, type Step } from "../navigation/steps";
 
 type Props = {
     currentStep: number;
     totalSteps: number;
+    currentStepId: Step;
+    language: "en" | "es";
 };
 
-function CheckIcon() {
-    return (
-        <svg
-            className={styles.checkIcon}
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-        >
-            <polyline points="20 6 9 17 4 12" />
-        </svg>
+export default function ProgressBar({
+    currentStep,
+    totalSteps,
+    currentStepId,
+    language,
+}: Props) {
+    const t = loadLanguage(language).progressBar;
+    const progressPercent = Math.round((currentStep / totalSteps) * 100);
+    const currentSectionIndex = progressSections.findIndex((section) =>
+        section.steps.includes(currentStepId),
     );
-}
+    const currentSection =
+        progressSections[currentSectionIndex] ?? progressSections[0];
+    const currentSectionStep =
+        currentSection.steps.findIndex((step) => step === currentStepId) + 1;
+    const currentSectionTitle = t.sections[currentSection.id];
 
-export default function ProgressBar({ currentStep, totalSteps }: Props) {
     return (
         <div
             className={styles.progressBarContainer}
@@ -25,39 +33,49 @@ export default function ProgressBar({ currentStep, totalSteps }: Props) {
             aria-valuenow={currentStep}
             aria-valuemin={1}
             aria-valuemax={totalSteps}
-            aria-label={`Step ${currentStep} of ${totalSteps}`}
+            aria-valuetext={t.ariaValueText(
+                currentSectionTitle,
+                currentStep,
+                totalSteps,
+            )}
         >
-            <div className={styles.stepsTrack}>
-                {Array.from({ length: totalSteps }, (_, i) => {
-                    const step = i + 1;
-                    const isCompleted = step < currentStep;
-                    const isCurrent = step === currentStep;
+            <div className={styles.progressLayout}>
+                <div className={styles.progressMain}>
+                    <div className={styles.progressHeader}>
+                        <p className={styles.progressEyebrow}>
+                            {t.currentSection}
+                        </p>
+                        <p className={styles.progressStepText}>
+                            {t.stepOf(currentStep, totalSteps)}
+                        </p>
+                    </div>
 
-                    const circleClass = isCompleted
-                        ? styles.completed
-                        : isCurrent
-                          ? styles.current
-                          : styles.upcoming;
+                    <div className={styles.progressTrack} aria-hidden="true">
+                        <div
+                            className={styles.progressFill}
+                            style={{ width: `${progressPercent}%` }}
+                        />
+                    </div>
 
-                    return (
-                        <div key={step} className={styles.stepWrapper}>
-                            <div
-                                className={`${styles.stepCircle} ${circleClass}`}
-                            >
-                                {isCompleted ? <CheckIcon /> : step}
-                            </div>
-
-                            {/* Connector line after each step except the last */}
-                            {step < totalSteps && (
-                                <div
-                                    className={`${styles.stepConnector} ${
-                                        isCompleted ? styles.completed : ""
-                                    }`}
-                                />
+                    <div className={styles.progressMeta}>
+                        <p className={styles.progressTitle}>
+                            {currentSectionTitle}
+                        </p>
+                        <p className={styles.progressSectionText}>
+                            {t.sectionStepOf(
+                                currentSectionStep,
+                                currentSection.steps.length,
                             )}
-                        </div>
-                    );
-                })}
+                        </p>
+                    </div>
+                </div>
+
+                <div className={styles.progressPercentWrap}>
+                    <p className={styles.progressPercent}>{progressPercent}%</p>
+                    <p className={styles.progressPercentLabel}>
+                        {t.completedLabel}
+                    </p>
+                </div>
             </div>
         </div>
     );

@@ -30,8 +30,8 @@ export function useNavigation() {
         setCurrentStepIndex(steps.indexOf(target));
     };
 
-    const currentStepNumber = currentStepIndex + 1;
-    const totalSteps = steps.length;
+    const currentStepNumber = currentStepIndex;
+    const totalSteps = steps.length - 1;
     const showProgress = currentStepIndex > 0;
     const hasSkip = step in skipTargets;
 
