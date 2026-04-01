@@ -107,6 +107,8 @@ export interface DiabetesSurveyTypes {
     results: {
         title: string;
         unavailable: string;
+        skipped: string;
+        noResults: string;
         conditionName: string;
         highRiskIntro: string;
         highRiskBullet1: string;

@@ -40,6 +40,8 @@ export const DiabetesSurveyText: DiabetesSurveyTypes = {
     results: {
         title: "Resultados del riesgo de diabetes",
         unavailable: "No es posible mostrar su resultado en este momento.",
+        skipped: "Se omitiÃ³ esta encuesta de diabetes.",
+        noResults: "No hay resultados de riesgo de diabetes para mostrar.",
         conditionName: "Diabetes",
         highRiskIntro:
             "Sus respuestas sugieren que puede tener un mayor riesgo de desarrollar diabetes tipo 2.",

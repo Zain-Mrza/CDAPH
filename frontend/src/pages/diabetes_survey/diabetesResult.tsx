@@ -6,8 +6,8 @@ type Props = {
     score: number | null;
     risk: string | null;
     possible: number | null;
+    wasSkipped: boolean;
     language: "en" | "es";
-    onFinish?: () => void;
     onBack: () => void;
     onNext: () => void;
 };
@@ -16,13 +16,34 @@ export default function DiabetesResults({
     score,
     risk,
     possible,
+    wasSkipped,
     language,
-    onFinish,
     onBack,
     onNext,
 }: Props) {
     const t = loadLanguage(language);
     const text = t.diabetesSurvey.results;
+
+    if (wasSkipped) {
+        return (
+            <div className="kioskCard">
+                <h1 className="title">{text.title}</h1>
+
+                <div className="resultsContainer">
+                    <div className="resultExplanation">
+                        <p>{text.skipped}</p>
+                        <p>{text.noResults}</p>
+                    </div>
+                </div>
+
+                <NavigationActions
+                    clickBack={onBack}
+                    clickNext={onNext}
+                    language={language}
+                />
+            </div>
+        );
+    }
 
     if (score === null) {
         return (
@@ -33,7 +54,7 @@ export default function DiabetesResults({
                     <p className="resultExplanation">{text.unavailable}</p>
                 </div>
 
-                <NavigationActions clickNext={onFinish} language={language} />
+                <NavigationActions clickBack={onBack} language={language} />
             </div>
         );
     }

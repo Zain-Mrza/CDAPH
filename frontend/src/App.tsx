@@ -53,6 +53,7 @@ export default function App() {
     const [diabetesRiskPossible, setDiabetesRiskPossible] = useState<
         number | null
     >(null);
+    const [diabetesSurveySkipped, setDiabetesSurveySkipped] = useState(false);
     const [miniEatAnswers, setMiniEatAnswers] = useState<Array<number | null>>(
         Array.from({ length: 9 }, () => null),
     );
@@ -72,16 +73,43 @@ export default function App() {
         goSkip,
     } = useNavigation();
 
-    const handleDiabetesCalculation = async () => {
-        const { score, risk, possible } = await submitDiabetesSurvey({
-            firstDegreeRelative: relativeWithDiabetes,
-            hypertension: hypertensionHistory,
-            physicallyActive: physicallyActive,
-        });
+    const resetDiabetesResults = () => {
+        setDiabetesRiskScore(null);
+        setDiabetesRisk(null);
+        setDiabetesRiskPossible(null);
+    };
 
-        setDiabetesRiskScore(score);
-        setDiabetesRisk(risk);
-        setDiabetesRiskPossible(possible);
+    const clearDiabetesSkippedState = () => {
+        setDiabetesSurveySkipped(false);
+    };
+
+    const isDiabetesSurveyUnanswered =
+        relativeWithDiabetes === "unavailable" &&
+        hypertensionHistory === "unavailable" &&
+        physicallyActive === "unavailable";
+
+    const handleDiabetesSkip = () => {
+        setDiabetesSurveySkipped(true);
+        resetDiabetesResults();
+        goSkip();
+    };
+
+    const handleDiabetesCalculation = async () => {
+        clearDiabetesSkippedState();
+
+        try {
+            const { score, risk, possible } = await submitDiabetesSurvey({
+                firstDegreeRelative: relativeWithDiabetes,
+                hypertension: hypertensionHistory,
+                physicallyActive: physicallyActive,
+            });
+
+            setDiabetesRiskScore(score);
+            setDiabetesRisk(risk);
+            setDiabetesRiskPossible(possible);
+        } catch {
+            resetDiabetesResults();
+        }
     };
 
     const updateMiniEatAnswer = (questionIndex: number, answer: number) => {
@@ -249,7 +277,7 @@ export default function App() {
                     <DiabetesSurveyIntro
                         onNext={goNext}
                         onBack={goBack}
-                        onSkip={goSkip}
+                        onSkip={handleDiabetesSkip}
                         language={language}
                     />
                 );
@@ -257,11 +285,12 @@ export default function App() {
                 return (
                     <RelativeQuestion
                         onNext={(hasRelative) => {
+                            clearDiabetesSkippedState();
                             setRelativeWithDiabetes(hasRelative);
                             goNext();
                         }}
                         onBack={goBack}
-                        onSkip={goSkip}
+                        onSkip={handleDiabetesSkip}
                         language={language}
                         initialValue={relativeWithDiabetes}
                     />
@@ -270,11 +299,12 @@ export default function App() {
                 return (
                     <HypertensionQuestion
                         onNext={(answer) => {
+                            clearDiabetesSkippedState();
                             setHypertensionHistory(answer);
                             goNext();
                         }}
                         onBack={goBack}
-                        onSkip={goSkip}
+                        onSkip={handleDiabetesSkip}
                         language={language}
                         initialValue={hypertensionHistory}
                     />
@@ -283,11 +313,12 @@ export default function App() {
                 return (
                     <PhysicallyActiveQuestion
                         onNext={(answer) => {
+                            clearDiabetesSkippedState();
                             setPhysicallyActive(answer);
                             goNext();
                         }}
                         onBack={goBack}
-                        onSkip={goSkip}
+                        onSkip={handleDiabetesSkip}
                         language={language}
                         initialValue={physicallyActive}
                     />
@@ -298,12 +329,20 @@ export default function App() {
                         relativeWithDiabetes={relativeWithDiabetes}
                         hypertensionHistory={hypertensionHistory}
                         physicallyActive={physicallyActive}
-                        onNext={() => {
-                            handleDiabetesCalculation();
+                        onNext={async () => {
+                            if (isDiabetesSurveyUnanswered) {
+                                setDiabetesSurveySkipped(true);
+                                resetDiabetesResults();
+                                goNext();
+                                return;
+                            }
+
+                            clearDiabetesSkippedState();
+                            await handleDiabetesCalculation();
                             goNext();
                         }}
                         onBack={goBack}
-                        onSkip={goSkip}
+                        onSkip={handleDiabetesSkip}
                         language={language}
                     />
                 );
@@ -314,6 +353,7 @@ export default function App() {
                         score={diabetesRiskScore}
                         risk={diabetesRisk}
                         possible={diabetesRiskPossible}
+                        wasSkipped={diabetesSurveySkipped}
                         onBack={goBack}
                         onNext={goNext}
                     />

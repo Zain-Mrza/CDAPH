@@ -38,6 +38,8 @@ export const DiabetesSurveyText: DiabetesSurveyTypes = {
     results: {
         title: "Diabetes Risk Results",
         unavailable: "Unable to display your result at this time.",
+        skipped: "This diabetes survey was skipped.",
+        noResults: "There are no diabetes risk results to display.",
         conditionName: "Diabetes",
         highRiskIntro:
             "Your answers suggest that you may be at an increased risk for developing type 2 diabetes.",
