@@ -15,6 +15,10 @@ export const MiniEatSurveyText: MiniEatSurveyTypes = {
         questionCounter: (current, total) => `Question ${current} of ${total}`,
         examplesLabel: "Examples",
         servingSizeLabel: "One serving equals",
+        answerSectionLabel: "Choose your answer",
+        answerInstruction:
+            "Select the option that best matches how often you usually eat this food.",
+        answerPlaceholder: "Select how often you eat it",
         options: [
             "I do not eat it at all",
             "Less than 1 serving per week",

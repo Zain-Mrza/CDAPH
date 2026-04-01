@@ -184,23 +184,103 @@
     min-width: 0;
 }
 
-.miniEatOptions {
+.miniEatAnswerCard {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: rgba(79, 141, 255, 0.05);
 }
 
-.miniEatOptionButton {
-    min-height: 72px;
-    justify-content: flex-start;
-    text-align: left;
-    font-size: 1.15rem;
-    line-height: 1.4;
-    padding: 18px 20px;
+.miniEatAnswerHeader h2 {
+    margin: 0 0 10px;
+    font-size: 1.65rem;
+    color: var(--text);
+}
+
+.miniEatAnswerInstruction {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.miniEatSelectWrapper {
+    position: relative;
+}
+
+.miniEatSelect {
+    width: 100%;
+    min-height: 96px;
+    padding: 20px 72px 20px 24px;
+    font-size: 1.55rem;
+    font-weight: 475;
+    line-height: 1.35;
+    color: var(--muted);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    background: #ffffff;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.miniEatSelect:hover {
+    border-color: var(--focus);
+    background: rgba(47, 107, 255, 0.05);
+}
+
+.miniEatSelect:focus {
+    outline: none;
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px rgba(47, 107, 255, 0.18);
+}
+
+.miniEatSelectFilled {
+    color: var(--text);
+}
+
+.miniEatSelectIcon {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    width: 16px;
+    height: 16px;
+    border-right: 3px solid var(--focus);
+    border-bottom: 3px solid var(--focus);
+    transform: translateY(-60%) rotate(45deg);
+    pointer-events: none;
 }
 
 @media (max-width: 1100px) {
     .miniEatQuestionLayout {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .miniEatAnswerCard {
+        padding: 20px;
+    }
+
+    .miniEatAnswerHeader h2 {
+        font-size: 1.4rem;
+    }
+
+    .miniEatAnswerInstruction {
+        font-size: 1.05rem;
+    }
+
+    .miniEatSelect {
+        min-height: 84px;
+        font-size: 1.25rem;
+        padding-right: 64px;
     }
 }

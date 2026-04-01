@@ -141,6 +141,9 @@ export interface MiniEatSurveyTypes {
         questionCounter: (current: number, total: number) => string;
         examplesLabel: string;
         servingSizeLabel: string;
+        answerSectionLabel: string;
+        answerInstruction: string;
+        answerPlaceholder: string;
         options: string[];
         items: MiniEatQuestionItem[];
     };

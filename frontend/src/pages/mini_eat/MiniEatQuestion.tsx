@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavigationActions from "../../components/NavigationActions";
 import SurveyQuestion from "../../components/SurveyQuestion";
 import { loadLanguage } from "../../i18n";
@@ -26,7 +26,12 @@ export default function MiniEatQuestion({
     const question = text.items[questionIndex];
     const totalQuestions = text.items.length;
     const isLastQuestion = questionIndex === totalQuestions - 1;
-    const inputName = `mini-eat-question-${questionIndex + 1}`;
+    const selectId = `mini-eat-question-${questionIndex + 1}`;
+    const instructionId = `${selectId}-instruction`;
+
+    useEffect(() => {
+        setAnswer(initialValue);
+    }, [initialValue, questionIndex]);
 
     return (
         <SurveyQuestion
@@ -69,28 +74,52 @@ export default function MiniEatQuestion({
                 <fieldset className="surveyFieldset miniEatFieldset">
                     <legend className="srOnly">{question.prompt}</legend>
 
-                    <div
-                        className="miniEatOptions"
-                        role="radiogroup"
-                        aria-label={question.prompt}
-                    >
-                        {text.options.map((option, index) => (
-                            <label
-                                key={option}
-                                className={`surveyButton miniEatOptionButton ${
-                                    answer === index ? "selected" : ""
-                                }`}
+                    <div className="miniEatAnswerCard">
+                        <div className="miniEatAnswerHeader">
+                            <h2>{text.answerSectionLabel}</h2>
+                            <p
+                                id={instructionId}
+                                className="miniEatAnswerInstruction"
                             >
-                                <input
-                                    type="radio"
-                                    name={inputName}
-                                    value={index}
-                                    checked={answer === index}
-                                    onChange={() => setAnswer(index)}
-                                />
-                                <span>{option}</span>
-                            </label>
-                        ))}
+                                {text.answerInstruction}
+                            </p>
+                        </div>
+
+                        <div className="miniEatSelectWrapper">
+                            <select
+                                id={selectId}
+                                className={`miniEatSelect ${
+                                    answer !== null
+                                        ? "miniEatSelectFilled"
+                                        : ""
+                                }`}
+                                value={answer === null ? "" : String(answer)}
+                                aria-describedby={instructionId}
+                                onChange={(event) => {
+                                    const selectedValue = event.target.value;
+                                    setAnswer(
+                                        selectedValue === ""
+                                            ? null
+                                            : Number(selectedValue),
+                                    );
+                                }}
+                            >
+                                <option value="" disabled>
+                                    {text.answerPlaceholder}
+                                </option>
+
+                                {text.options.map((option, index) => (
+                                    <option key={option} value={index}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
+
+                            <span
+                                className="miniEatSelectIcon"
+                                aria-hidden="true"
+                            />
+                        </div>
                     </div>
                 </fieldset>
             </div>
