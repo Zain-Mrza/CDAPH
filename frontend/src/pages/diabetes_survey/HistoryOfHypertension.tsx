@@ -32,6 +32,7 @@ export default function HypertensionQuestion({
             onSkip={onSkip}
             skipLabel={text.skipLabel}
             questionCounterLabel={text.questionCounter(2, 3)}
+            language={language}
         >
             <fieldset className="surveyFieldset">
                 <legend className="srOnly">{text.hypertension}</legend>

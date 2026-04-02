@@ -32,6 +32,7 @@ export default function RelativeQuestion({
             onSkip={onSkip}
             skipLabel={text.skipLabel}
             questionCounterLabel={text.questionCounter(1, 3)}
+            language={language}
         >
             <fieldset className="surveyFieldset">
                 <legend className="srOnly">{text.relative}</legend>

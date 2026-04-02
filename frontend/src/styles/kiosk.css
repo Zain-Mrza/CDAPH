@@ -344,3 +344,63 @@ body,
     align-items: center;
     margin-top: 30px;
 }
+
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(11, 18, 32, 0.45);
+    z-index: 1000;
+}
+
+.modalCard {
+    width: min(560px, 100%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(11, 18, 32, 0.24);
+}
+
+.modalTitle {
+    margin: 0 0 12px;
+    font-size: 36px;
+}
+
+.modalMessage {
+    margin: 0;
+    color: var(--muted);
+    font-size: 22px;
+    line-height: 1.5;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+@media (max-width: 768px) {
+    .modalCard {
+        padding: 24px;
+    }
+
+    .modalTitle {
+        font-size: 30px;
+    }
+
+    .modalMessage {
+        font-size: 20px;
+    }
+
+    .modalActions {
+        flex-direction: column-reverse;
+    }
+
+    .modalActions .button {
+        width: 100%;
+    }
+}

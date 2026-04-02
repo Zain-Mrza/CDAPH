@@ -22,7 +22,12 @@ export default function MiniEatSummary({
     const text = t.miniEatSurvey.summary;
 
     return (
-        <Screen title={text.title} onSkip={onSkip} skipLabel={text.skipLabel}>
+        <Screen
+            title={text.title}
+            onSkip={onSkip}
+            skipLabel={text.skipLabel}
+            language={language}
+        >
             <p className="instructionText">{text.instruction}</p>
 
             <div className="summaryList">
