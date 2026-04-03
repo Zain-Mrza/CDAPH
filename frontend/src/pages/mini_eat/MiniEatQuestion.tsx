@@ -44,6 +44,7 @@ export default function MiniEatQuestion({
                 questionIndex + 1,
                 totalQuestions,
             )}
+            language={language}
         >
             <div className="miniEatQuestionLayout">
                 <div className="miniEatQuestionDetails">

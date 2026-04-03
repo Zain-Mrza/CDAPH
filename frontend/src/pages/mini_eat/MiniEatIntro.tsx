@@ -19,7 +19,12 @@ export default function MiniEatIntro({
     const text = t.miniEatSurvey.intro;
 
     return (
-        <Screen title={text.title} onSkip={onSkip} skipLabel={text.skipLabel}>
+        <Screen
+            title={text.title}
+            onSkip={onSkip}
+            skipLabel={text.skipLabel}
+            language={language}
+        >
             <p className="instructionText">{text.description}</p>
 
             <div className="infoBox">

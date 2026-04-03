@@ -31,7 +31,12 @@ export default function DiabetesSurveyReview({
     };
 
     return (
-        <Screen title={text.title} onSkip={onSkip} skipLabel={text.skipLabel}>
+        <Screen
+            title={text.title}
+            onSkip={onSkip}
+            skipLabel={text.skipLabel}
+            language={language}
+        >
             <p className="instructionText">{text.instruction}</p>
 
             <div className="summaryList">

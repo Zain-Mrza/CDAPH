@@ -32,6 +32,7 @@ export default function PhysicallyActiveQuestion({
             onSkip={onSkip}
             skipLabel={text.skipLabel}
             questionCounterLabel={text.questionCounter(3, 3)}
+            language={language}
         >
             <fieldset className="surveyFieldset">
                 <legend className="srOnly">{text.physicallyActive}</legend>

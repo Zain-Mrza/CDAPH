@@ -19,7 +19,12 @@ export default function DiabetesSurveyIntro({
     const text = t.diabetesSurvey.intro;
 
     return (
-        <Screen title={text.title} onSkip={onSkip} skipLabel={text.skipLabel}>
+        <Screen
+            title={text.title}
+            onSkip={onSkip}
+            skipLabel={text.skipLabel}
+            language={language}
+        >
             <p className="instructionText">{text.description}</p>
 
             <div className="infoBox">

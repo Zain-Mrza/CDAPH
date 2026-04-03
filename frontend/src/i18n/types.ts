@@ -52,6 +52,10 @@ export interface NavigationTypes {
     back: string;
     skipSurvey: string;
     completeSurvey: string;
+    skipConfirmationTitle: string;
+    skipConfirmationMessage: string;
+    skipConfirmationConfirm: string;
+    skipConfirmationCancel: string;
 }
 
 export interface InstructionTypes {
