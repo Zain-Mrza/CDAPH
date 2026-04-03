@@ -21,6 +21,7 @@ import MiniEatSummary from "./pages/mini_eat/MiniEatSummary";
 import Start from "./pages/Start";
 import SummaryStep from "./pages/Summary";
 import Weight from "./pages/Weight";
+import SnellenChart from "./pages/snellen_chart/chart";
 
 export default function App() {
     /* Language state */
@@ -386,8 +387,13 @@ export default function App() {
                         maxScore={miniEatMaxScore}
                         language={language}
                         onBack={goBack}
+                        onNext={() => {
+                            goNext();
+                        }}
                     />
                 );
+            case "snellenChart":
+                return <SnellenChart />;
             default:
                 return null;
         }

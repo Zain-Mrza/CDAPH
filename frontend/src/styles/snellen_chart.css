@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Optician Sans';
+    src: url("./fonts/Optician-Sans.woff2")
+}
+
+.snellen-chart h1 {
+    font-family: 'Optician Sans', serif;
+    font-size: 66px;
+}

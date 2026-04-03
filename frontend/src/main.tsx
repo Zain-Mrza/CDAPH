@@ -5,6 +5,7 @@ import { resetBackendState, resetBackendStateOnPageExit } from "./client";
 import "./styles/kiosk.css";
 import "./styles/risk-slider.css";
 import "./styles/survey.css";
+import "./styles/snellen_chart.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
@@ -50,7 +51,10 @@ async function bootstrap() {
     try {
         await resetBackendState();
     } catch (error) {
-        console.error("Unable to reset backend state during app startup.", error);
+        console.error(
+            "Unable to reset backend state during app startup.",
+            error,
+        );
         renderStartupFailure();
         return;
     }

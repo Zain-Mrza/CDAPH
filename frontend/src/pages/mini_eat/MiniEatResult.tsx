@@ -8,6 +8,7 @@ type Props = {
     maxScore: number;
     language: "en" | "es";
     onBack: () => void;
+    onNext: () => void;
 };
 
 export default function MiniEatResult({
@@ -16,6 +17,7 @@ export default function MiniEatResult({
     maxScore,
     language,
     onBack,
+    onNext,
 }: Props) {
     const t = loadLanguage(language);
     const text = t.miniEatSurvey.results;
@@ -112,7 +114,11 @@ export default function MiniEatResult({
                 </div>
             </div>
 
-            <NavigationActions clickBack={onBack} language={language} />
+            <NavigationActions
+                clickBack={onBack}
+                language={language}
+                clickNext={onNext}
+            />
         </div>
     );
 }

@@ -26,6 +26,7 @@ export const steps = [
     "miniEatQuestion9",
     "miniEatSummary",
     "miniEatResults",
+    "snellenChart",
 ] as const;
 
 export type Step = (typeof steps)[number];
