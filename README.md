@@ -51,9 +51,15 @@ The system is designed with the following goals in mind:
 
 3. **Diabetes Survey**
 
-4. **Vaccine Survey**
+4. **Mini-EAT Survey**
+    - https://minieat.mayoclinic.org/
 
-5. **Completion / Results (Planned)**
+4. **Snellen Chart**
+    - Font: Optician Sans by ANTI Hamar & Fábio Duarte Martins
+        - https://optician-sans.com/
+5. **Vaccine Survey**
+
+6. **Completion / Results (Planned)**
     - Summary of collected values
     - General, clinically sound health guidance
     - Optional export to printer or email
