@@ -54,12 +54,13 @@ The system is designed with the following goals in mind:
 4. **Mini-EAT Survey**
     - https://minieat.mayoclinic.org/
 
-4. **Snellen Chart**
+5. **Snellen Chart**
     - Font: Optician Sans by ANTI Hamar & Fábio Duarte Martins
         - https://optician-sans.com/
-5. **Vaccine Survey**
+    - Text size must be calibrated to monitor size
+6. **Vaccine Survey**
 
-6. **Completion / Results (Planned)**
+7. **Completion / Results (Planned)**
     - Summary of collected values
     - General, clinically sound health guidance
     - Optional export to printer or email
