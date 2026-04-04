@@ -158,6 +158,7 @@ export default function App() {
                     )}
 
                     <MiniEatQuestion
+                        key={questionIndex}
                         questionIndex={questionIndex}
                         initialValue={miniEatAnswers[questionIndex]}
                         onNext={(answer) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavigationActions from "../../components/NavigationActions";
 import SurveyQuestion from "../../components/SurveyQuestion";
 import { loadLanguage } from "../../i18n";
@@ -28,10 +28,6 @@ export default function MiniEatQuestion({
     const isLastQuestion = questionIndex === totalQuestions - 1;
     const selectId = `mini-eat-question-${questionIndex + 1}`;
     const instructionId = `${selectId}-instruction`;
-
-    useEffect(() => {
-        setAnswer(initialValue);
-    }, [initialValue, questionIndex]);
 
     return (
         <SurveyQuestion
