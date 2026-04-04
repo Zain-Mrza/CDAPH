@@ -43,11 +43,13 @@ export default function MiniEatQuestion({
             language={language}
         >
             <div className="miniEatQuestionLayout">
+                {/* Begin left-hand instructions*/}
                 <div className="miniEatQuestionDetails">
                     <section className="miniEatQuestionSection">
                         <h2>{text.examplesLabel}</h2>
 
                         <ul>
+                            {/*Bullet points*/}
                             {question.examples.map((example) => (
                                 <li key={example}>{example}</li>
                             ))}
@@ -67,7 +69,9 @@ export default function MiniEatQuestion({
                         <p>{question.servingSize}</p>
                     </section>
                 </div>
+                {/* End left-hand instructions*/}
 
+                {/* Begin question-answering section*/}
                 <fieldset className="surveyFieldset miniEatFieldset">
                     <legend className="srOnly">{question.prompt}</legend>
 
@@ -86,9 +90,7 @@ export default function MiniEatQuestion({
                             <select
                                 id={selectId}
                                 className={`miniEatSelect ${
-                                    answer !== null
-                                        ? "miniEatSelectFilled"
-                                        : ""
+                                    answer !== null ? "miniEatSelectFilled" : ""
                                 }`}
                                 value={answer === null ? "" : String(answer)}
                                 aria-describedby={instructionId}
@@ -119,6 +121,7 @@ export default function MiniEatQuestion({
                         </div>
                     </div>
                 </fieldset>
+                {/* End question-answering section*/}
             </div>
 
             <NavigationActions
